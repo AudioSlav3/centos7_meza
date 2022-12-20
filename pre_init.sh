@@ -36,6 +36,9 @@ adminuser=null
 #################################
 ##### Add user to sudoers
 update_sudo () {
+ if test -f "${HOME}/sudo.done"; then
+   echo -e "${ok}Nothing to do."
+ fi
  while ! test -f "${HOME}/sudo.done"; do 
   sudouser=()
   sudousers=$(cut -d: -f1 /etc/passwd | egrep -v "bin|daemon|adm|lp|sync|shutdown|halt|mail|operator|games|ftp|nobody|systemd-network|dbus|polkitd|sshd|postfix|root"|xargs)
