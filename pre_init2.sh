@@ -40,7 +40,7 @@ while ! test -f "${HOME}/ssh.done"; do
   if ! test -f "${HOME}/add_ssh.sh"; then
     echo -e "${info}#### PERFORM THE FOLLOWING ON YOUR HOST MACHINE ###${NC}"
     echo -e "${info}## open pterm.exe (Putty windows command line) ${NC}"
-    echo -e "${info}## run: ${NC}"
+    echo -e "${info}## run the following ${NC}"
     echo -e "${info}## ${purple}pscp.exe ${white}..\..\NASAWiki\vmbuild\${purple}add_ssh.sh ${USER}@${hostname -I}:${HOME}${NC}"
     echo -e "${info}######################################${NC}"
     echo -e "${brown} Press [ENTER] ONLY AFTER completing ALL of the above.${NC}" 
