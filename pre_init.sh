@@ -64,10 +64,11 @@ update_sudo () {
   if $(cat /etc/sudoers | grep -q ${adminuser}) || test -f "/etc/sudoers.d/${adminuser}" ; then
     touch ${HOME}/sudo.done
   fi
- done
- if $(sudo -l -U ${adminuser}|grep -q "(ALL) NOPASSWD: ALL"); then
+
+   if $(sudo -l -U ${adminuser}|grep -q "(ALL) NOPASSWD: ALL"); then
     echo -e "${ok}Successfully added ${adminuser} to sudoers"
 	echo -e "${cyan} Run pre_init2.sh as ${adminuser}"
- fi
+   fi
+ done
 }
 update_sudo
