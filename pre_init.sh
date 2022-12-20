@@ -38,6 +38,7 @@ adminuser=null
 update_sudo () {
  if test -f "${HOME}/sudo.done"; then
    echo -e "${ok}Nothing to do."
+   	echo -e "${cyan} If not already done, run pre_init2.sh as user with sudo priveledges."
  fi
  while ! test -f "${HOME}/sudo.done"; do 
   sudouser=()
