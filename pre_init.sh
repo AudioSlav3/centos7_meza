@@ -57,7 +57,6 @@ update_sudo () {
     sudo visudo
     read ans
   else 
-    sed -i 's/#includedir/includedir/g' /etc/sudoers
     adminuser=${sudouser[0]}
     echo "${sudouser[0]} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/${adminuser}
     chown root:root /etc/sudoers.d/${adminuser}
