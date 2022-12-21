@@ -132,7 +132,18 @@ add_wikis () {
   if ! $(echo $wikisection | grep -q "#"); then 
     echo "$wikisection, $wikiid, $wikititle"
 	if ! test -d "/opt/conf-meza/public/wikis/$wikiid/"; then 
-	  sudo meza create wiki-promptless monolith $wikiid '"'$wikititle'"'
+	  case $wikiid in 
+	    poic)
+		  sudo meza create wiki-promptless monolith $wikiid "HOSC Wiki"
+		;;
+		science)
+		  sudo meza create wiki-promptless monolith $wikiid "Science"
+		;;
+		cadre)
+		  sudo meza create wiki-promptless monolith $wikiid "POIC Cadre"
+		;;
+	  esac
+	  #sudo meza create wiki-promptless monolith $wikiid '"'$wikititle'"'
 	  sudo cp $delta_config_file_dirs/wikis/$wikiid/* /opt/conf-meza/public/wikis/$wikiid/
 	fi 
 	if [ "$wikisection" = "header" ]; then  
@@ -176,4 +187,4 @@ add_wikis () {
 install_meza_base
 install_mediawiki_extensions
 meza_public_init
-#add_wikis
+add_wikis
