@@ -56,7 +56,10 @@ done
 #################################
 ##### MISC Settings
 update_misc_settings () {
-sudo sed -i 's/Kernel \\r on an \\m/IP Address: \\4/g' /etc/issue
+ while ! test -f "${HOME}/misc.done"; do 
+  sudo sed -i 's/Kernel \\r on an \\m/IP Address: \\4/g' /etc/issue
+  touch ${HOME}/misc.done
+ done
 }
 #################################
 ##### START Install Packages
@@ -65,8 +68,8 @@ update_packages () {
 	 myNewPackages=()
 	 sudo yum -y install deltarpm
 	 sudo yum update -q -y
-	 centos_7_vbox="gcc make perl bzip2 kernel-headers kernel-devel-$(uname -r) elfutils-libelf-devel xorg-x11-drivers xorg-x11-utils libXt.x86_64"
-	 centos_7=$centos_7_vbox" screen git nano zip unzip dialog wget"
+	 centos_7_vbox="gcc make perl bzip2 kernel-headers kernel-devel-$(uname -r) elfutils-libelf-devel xorg-x11-drivers xorg-x11-utils libXt.x86_64 libXmu"
+	 centos_7=$centos_7_vbox" screen nano zip unzip dialog git wget tar"
 	 
 	 centos_8_vbox="tar gcc make perl bzip2 kernel-headers-$(uname -r) kernel-devel-$(uname -r) elfutils-libelf-devel xorg-x11-drivers xorg-x11-utils.x86_64 libXt.x86_64"
 	 centos_8=$centos_8_vbox" git nano zip unzip dialog"
@@ -118,9 +121,20 @@ install_VBoxGuest () {
    sudo /cdrom/VBoxLinuxAdditions.run
    touch ${HOME}/vbox.done
  fi 
+ echo -e "${info}Waiting 10 seconds for mount."
+ sleep 10
+ if  [ "$(sudo ls -A /mnt)" ]; then 
+   echo -e "${ok}Successfully mount detected"
+ fi
  done
 }
 update_ssh
 update_misc_settings
 update_packages
 install_VBoxGuest
+if test -f "${HOME}/ssh.done" && test -f "${HOME}/misc.done" && test -f "${HOME}/pkg.done" && test -f "${HOME}/vbox.done"; then 
+  echo -e "${ok}All user settings applied"
+  echo -e "${cyan} Ready to run meza_init.sh${NC}"
+else
+  echo -e "${warn}Not all applied, check settings before proceeding."
+fi

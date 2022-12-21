@@ -37,8 +37,8 @@ adminuser=null
 ##### Add user to sudoers
 update_sudo () {
  if test -f "${HOME}/sudo.done"; then
-   echo -e "${ok}Nothing to do."
-   	echo -e "${cyan} If not already done, run pre_init2.sh as user with sudo priveledges."
+   echo -e "${ok}Nothing to do.${NC}"
+   	echo -e "${cyan} If not already done, login and run user_init.sh as user with sudo priveledges.${NC}"
  fi
  while ! test -f "${HOME}/sudo.done"; do 
   sudouser=()
@@ -70,9 +70,14 @@ update_sudo () {
   fi
 
    if $(sudo -l -U ${adminuser}|grep -q "(ALL) NOPASSWD: ALL"); then
-    echo -e "${ok}Successfully added ${adminuser} to sudoers"
-	echo -e "${cyan} Run pre_init2.sh as ${adminuser}"
+    echo -e "${ok}Successfully added ${adminuser} to sudoers${NC}"
+	echo -e "${cyan} Run user_init.sh as ${adminuser}${NC}"
    fi
  done
 }
 update_sudo
+if test -f "${HOME}/sudo.done"; then 
+  echo -e "${ok}Done."
+else
+  echo -e "${warn}Not all applied, check settings before proceeding."
+fi
