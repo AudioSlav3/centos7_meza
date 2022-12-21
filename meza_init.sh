@@ -152,5 +152,5 @@ add_wikis () {
 ##### END   
 #################################
 install_meza_base
+meza_public_init
 add_wikis
-#meza_public_init
