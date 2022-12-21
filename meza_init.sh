@@ -105,17 +105,19 @@ add_wikis () {
  #Read File to use in deploy
  header_wikis=()
  footer_wikis=()
+ header_wikis+=( "  - demo" )
  while IFS='|' read -r wikisection wikiid wikititle
  do
   if ! $(echo $wikisection | grep -q "#"); then 
     echo "$wikisection, $wikiid, $wikititle"
 	if [ "$wikisection" = "header" ]; then  
-		header_wikis+=( "  - "${wikisection} )
+		header_wikis+=( "  - "${wikiid} )
 	fi
 	if [ "$wikisection" = "footer" ]; then  
-		footer_wikis+=( "  - "${wikisection} )
+		footer_wikis+=( "  - "${wikiid} )
 	fi
-	
+	header_wikis+=( \n )
+	footer_wikis+=( \n )
   fi
  done < $variable_dirs/wikis.txt
  echo ${header_wikis[*]}
