@@ -5,7 +5,7 @@ list:
   # ###################################################################
   - name: Cargo
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Cargo
-    version: "tags/2.4"
+    version: "tags/2.8"
     config: |
       $smwgEnabledCompatibilityMode = true;
       $wgCargoDefaultQueryLimit = 5000;
@@ -18,49 +18,49 @@ list:
 
   # This will be installed on all wikis and eventually will be part of core
   # Meza, but for now OSO is testing it.
-  - name: DisplayTitle
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DisplayTitle.git
-    version: "tags/1.2"
+  # - name: DisplayTitle
+    # repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DisplayTitle.git
+    # version: "tags/1.2"
 
   # Allows for custom sidebar based on user page or assigned group.
-  - name: DynamicSidebar
-    repo: https://github.com/wikimedia/mediawiki-extensions-DynamicSidebar.git
+  # - name: DynamicSidebar
+    # repo: https://github.com/wikimedia/mediawiki-extensions-DynamicSidebar.git
     # After this, specifies MW 1.35 is required
-    version: 09addc3c051d91439458a44e6db6f7e992c27121
-    config: |
-      $wgDynamicSidebarUseUserpages = true;
-      $wgDynamicSidebarUseGroups = true;
+    # version: 09addc3c051d91439458a44e6db6f7e992c27121
+    # config: |
+      # $wgDynamicSidebarUseUserpages = true;
+      # $wgDynamicSidebarUseGroups = true;
 
-  - name: MyVariables
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/MyVariables
-    version: "tags/3.4.0"
-    legacy_load: True
+  # - name: MyVariables
+    # repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/MyVariables
+    # version: "tags/3.4.0"
+    # legacy_load: True
 
-  - name: Mermaid
-    composer: mediawiki/mermaid
-    version: "2.1.1"
-    config: |
-      wfLoadExtension( 'Mermaid' );
-      $mermaidgDefaultTheme  = 'forest'; //'forest', 'default', 'neutral', 'dark'
+  # - name: Mermaid
+    # composer: mediawiki/mermaid
+    # version: "2.1.1"
+    # config: |
+      # wfLoadExtension( 'Mermaid' );
+      # $mermaidgDefaultTheme  = 'forest'; //'forest', 'default', 'neutral', 'dark'
 
-  - name: SummaryTimeline
-    repo: https://github.com/darenwelsh/SummaryTimeline.git
-    version: "tags/v0.2.0"
-    legacy_load: True
+  # - name: SummaryTimeline
+    # repo: https://github.com/darenwelsh/SummaryTimeline.git
+    # version: "tags/v0.2.0"
+    # legacy_load: True
  
   # ######################################################################
   # Testing in Demo
   # ######################################################################
-  - name: Lingo
-    composer: "mediawiki/lingo"
-    version: "~3.0"
-    config: |
-      // installed by composer, we have to manually load it
-      wfLoadExtension( "Lingo" );
-      // avoid funkiness in MobileFrontend
-      $wgMFRemovableClasses = [ 'base' => [ '.mw-lingo-tooltip' ] ];
-    wikis:
-      - demo
+  # - name: Lingo
+    # composer: "mediawiki/lingo"
+    # version: "~3.0"
+    # config: |
+      # // installed by composer, we have to manually load it
+      # wfLoadExtension( "Lingo" );
+      # // avoid funkiness in MobileFrontend
+      # $wgMFRemovableClasses = [ 'base' => [ '.mw-lingo-tooltip' ] ];
+    # wikis:
+      # - demo
   # ######################################################################
   # NASA Extensions
   # ######################################################################
