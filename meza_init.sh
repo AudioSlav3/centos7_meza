@@ -105,7 +105,7 @@ add_wikis () {
  #Read File to use in deploy
  header_wikis=()
  footer_wikis=()
- header_wikis+=( "  - demo" )
+ header_wikis+=( "  - demo"\\n )
  while IFS='|' read -r wikisection wikiid wikititle
  do
   if ! $(echo $wikisection | grep -q "#"); then 
@@ -116,10 +116,10 @@ add_wikis () {
 	if [ "$wikisection" = "footer" ]; then  
 		footer_wikis+=( "  - "${wikiid} )
 	fi
-	header_wikis+=( \n )
-	footer_wikis+=( \n )
   fi
  done < $variable_dirs/wikis.txt
+ header_wikis+=( \\n )
+footer_wikis+=( \\n )
  echo ${header_wikis[*]}
  sed -n "/blender_header_wikis:/{p;:a;N;/\n# blender_middle_wiki_title/!ba;s/.*\n/${header_wikis[*]}\n/};p" /opt/conf-meza/public/public.yml
 }
