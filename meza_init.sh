@@ -28,8 +28,7 @@ warn="[${YELLOW}WARN${NC}] "
 
 #
 # Config File Variables
-config_file_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/meza_public"
-# sha1sum $config_file_dirs/<subfolder>/<file> | cut -d " " -f1|xargs
+config_file_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/public_meza"
 
 check_hash () {
   source_file=$1
@@ -70,16 +69,16 @@ install_meza_base () {
 ##### END
 #################################
 ##### START Write public files
-meza_public_update () {
+meza_public_init () {
  if ! check_hash $config_file_dirs/public.yml $init_file ; then
     echo -e "${warn}${NC}Checksum failed, fixing"
 	#write file with 'demo' as default wiki
-
+	#sudo cp -f $config_file_dirs/public.yml $init_file
  else
     echo -e "${ok}${NC}Checksum OK"
  fi
  
-  init_public_yml=9ad4cf12ea8c7c42000a7af92864e80e807a0718
+  
   init_file=/opt/conf-meza/public/primewiki
  if [[ ! $(echo "$init_public_yml $init_file" | sha1sum -c ) ]]; then
     echo -e "${warn}${NC}Checksum failed, fixing"
@@ -98,7 +97,9 @@ EOF
 add_wikis () {
 while IFS='|' read -r wikisection wikiid wikititle
 do
-  echo "$wikisection, $wikiid, $wikititle"
+  if ! $(grep -q "#" $wikisection); then 
+    echo "$wikisection, $wikiid, $wikititle"
+  fi
 done < $config_file_dirs/wikis.txt
 }
 
