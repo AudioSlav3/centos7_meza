@@ -75,26 +75,28 @@ install_meza_base () {
 ##### START Write public files
 meza_public_init () {
  while ! test -f "${HOME}/meza_config_init.done"; do 
- if ! check_hash $config_file_dirs/public.yml $init_file ; then
-    echo -e "${warn}${NC}Checksum failed, fixing"
-	#write file with 'demo' as default wiki
-	#sudo cp -f $config_file_dirs/public.yml $init_file
- else
-    echo -e "${ok}${NC}Checksum OK"
- fi
+ cp -Rf $config_file_dirs/* /opt/conf-meza/public/
+ 
+ # if ! check_hash $config_file_dirs/public.yml $init_file ; then
+    # echo -e "${warn}${NC}Checksum failed, fixing"
+	write file with 'demo' as default wiki
+	sudo cp -f $config_file_dirs/public.yml $init_file
+ # else
+    # echo -e "${ok}${NC}Checksum OK"
+ # fi
  
   
-  init_file=/opt/conf-meza/public/primewiki
- if [[ ! $(echo "$init_public_yml $init_file" | sha1sum -c ) ]]; then
-    echo -e "${warn}${NC}Checksum failed, fixing"
-	#write file with 'demo' as default wiki
+  # init_file=/opt/conf-meza/public/primewiki
+ # if [[ ! $(echo "$init_public_yml $init_file" | sha1sum -c ) ]]; then
+    # echo -e "${warn}${NC}Checksum failed, fixing"
+	write file with 'demo' as default wiki
 	
-	cat << 'EOF' > ${init_file}
-demo
-EOF
- else
-    echo -e "${ok}${NC}Checksum OK"	
- fi
+	# cat << 'EOF' > ${init_file}
+# demo
+# EOF
+ # else
+    # echo -e "${ok}${NC}Checksum OK"	
+ # fi
  touch ${HOME}/meza_config_init.done
  done
 }

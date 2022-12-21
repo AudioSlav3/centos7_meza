@@ -44,6 +44,7 @@ blender_footer_wikis:
   - stowage
   - mgc
   - tco
+  - cadre
 
 blender_footer_links:
   - "<a href='https://aeonsp.hosc.msfc.nasa.gov/SitePages/Home.aspx'>AEON Home</a>"
@@ -115,7 +116,7 @@ server_performance_memory_usage_danger: 85
 server_performance_crontime: "* * * * *"
 
 
-primary_wiki_id: poic
+primary_wiki_id: demo
 
 # backups_cleanp:
   # crontime:"0 * * * *"

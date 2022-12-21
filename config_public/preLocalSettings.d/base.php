@@ -10,7 +10,7 @@
 // $mezaEnableAllWikiEmail = true;
 
 // set a default $mezaAuthType for all wikis that don't specify one
-$mezaAuthType = 'viewer-read';
+#$mezaAuthType = 'viewer-read';
 
 // don't let nobody do no account creatin'
 // $wgGroupPermissions['*']['createaccount'] = false;
