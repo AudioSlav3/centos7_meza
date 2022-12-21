@@ -44,7 +44,7 @@ check_hash () {
   fi
 }
 update_meza_config () {
-  meza deploy monolith --tags mediawiki --skip-tags latest,update.php,verify-wiki,smw-data,search-index,parsoid,mediawiki-core
+  sudo meza deploy monolith --tags mediawiki --skip-tags latest,update.php,verify-wiki,smw-data,search-index,parsoid,mediawiki-core
 }
 #################################
 ##### BASE MEZA Install
