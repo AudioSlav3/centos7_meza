@@ -1,7 +1,7 @@
 #pg_section|path_name|wiki_name
-header|poic|"HOSC Wiki"
-middle|science|"Science"
-footer|cadre|"POIC Cadre"
+header|poic|HOSC Wiki
+middle|science|Science
+footer|cadre|POIC Cadre
 #footer|pod|"POD"
 #footer|oc|"OC"
 #footer|paycom|"PAYCOM"
