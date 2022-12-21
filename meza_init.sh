@@ -111,10 +111,10 @@ add_wikis () {
   if ! $(echo $wikisection | grep -q "#"); then 
     echo "$wikisection, $wikiid, $wikititle"
 	if [ "$wikisection" = "header" ]; then  
-		header_wikis+=("  - "${wikiid})
+		header_wikis+=("  - ${wikiid}")
 	fi
 	if [ "$wikisection" = "footer" ]; then  
-		footer_wikis+=("  - "${wikiid})
+		footer_wikis+=("  - ${wikiid}")
 	fi
   fi
  done < $variable_dirs/wikis.txt
