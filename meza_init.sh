@@ -169,7 +169,7 @@ add_wikis () {
  # echo '"'${middle_wikis[@]}'"'
  # echo -e "${cyan}Footer Wikis:${NC}"
  # echo '"'${footer_wikis[@]}'"'
- if $cfg_updt; then 
+ if [ "$cfg_updt" = "0" ]; then 
    update_meza_config
  fi
 # sed -n "/blender_header_wikis:/{p;:a;N;/\n# blender_middle_wiki_title/!ba;s/.*\n/${header_wikis[*]}\n/};p" /opt/conf-meza/public/public.yml
@@ -184,7 +184,7 @@ add_wikis () {
 ##### START Write public files
 meza_public_updt () {
  while ! test -f "${HOME}/meza_config_updt.done"; do 
-   sudo rsync -av --exclude="$delta_config_file_dirs/wikis" $delta_config_file_dirs /opt/conf-meza/public/
+   sudo rsync -av --exclude='wikis' $delta_config_file_dirs/ /opt/conf-meza/public/
  
    update_meza_config
    touch ${HOME}/meza_config_updt.done
