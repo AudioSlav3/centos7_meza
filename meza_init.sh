@@ -132,7 +132,7 @@ add_wikis () {
   if ! $(echo $wikisection | grep -q "#"); then 
     echo "$wikisection, $wikiid, $wikititle"
 	if ! test -d "/opt/conf-meza/public/wikis/$wikiid/"; then 
-	  sudo meza create wiki-promptless monolith $wikiid "$wikititle"
+	  sudo meza create wiki-promptless monolith $wikiid '"'$wikititle'"'
 	  sudo cp $delta_config_file_dirs/wikis/$wikiid/* /opt/conf-meza/public/wikis/$wikiid/
 	fi 
 	if [ "$wikisection" = "header" ]; then  
