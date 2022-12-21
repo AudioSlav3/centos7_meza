@@ -30,6 +30,7 @@ warn="[${YELLOW}WARN${NC}] "
 # Config File Variables
 variable_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/public_meza"
 config_file_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/config_public"
+delta_config_file_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/delta_config_public"
 
 # Function to compare hashes
 check_hash () {
@@ -130,6 +131,10 @@ add_wikis () {
  do
   if ! $(echo $wikisection | grep -q "#"); then 
     echo "$wikisection, $wikiid, $wikititle"
+	if ! test -d "/opt/conf-meza/public/wikis/$wikiid/"; then 
+	  sudo meza create wiki-promptless monolith $wikiid "$wikititle"
+	  sudo cp $delta_config_file_dirs/wikis/$wikiid/* /opt/conf-meza/public/wikis/$wikiid/
+	fi 
 	if [ "$wikisection" = "header" ]; then  
 		header_wikis+=(${wikiid})
 	fi
@@ -149,6 +154,7 @@ add_wikis () {
  echo '"'${middle_wikis[@]}'"'
  echo -e "${cyan}Footer Wikis:${NC}"
  echo '"'${footer_wikis[@]}'"'
+ update_meza_config
 # sed -n "/blender_header_wikis:/{p;:a;N;/\n# blender_middle_wiki_title/!ba;s/.*\n/${header_wikis[*]}\n/};p" /opt/conf-meza/public/public.yml
 # sed -n "/blender_footer_wikis:/{p;:a;N;/\n# blender_footer_wikis/!ba;s/.*\n/${footer_wikis[*]}\n/};p" /opt/conf-meza/public/public.yml
 }
@@ -170,4 +176,4 @@ add_wikis () {
 install_meza_base
 install_mediawiki_extensions
 meza_public_init
-#add_wikis
+add_wikis
