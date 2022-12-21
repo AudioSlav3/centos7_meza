@@ -189,6 +189,7 @@ meza_public_updt () {
    update_meza_config
    touch ${HOME}/meza_config_updt.done
  done
+ sudo sed 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27anon-read\x27;/g' /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
 }
 ##### END   
 #################################
