@@ -75,12 +75,12 @@ install_meza_base () {
 ##### START Write public files
 meza_public_init () {
  while ! test -f "${HOME}/meza_config_init.done"; do 
- cp -Rf $config_file_dirs/* /opt/conf-meza/public/
+ sudo cp -Rf $config_file_dirs/* /opt/conf-meza/public/
  
  # if ! check_hash $config_file_dirs/public.yml $init_file ; then
     # echo -e "${warn}${NC}Checksum failed, fixing"
-	write file with 'demo' as default wiki
-	sudo cp -f $config_file_dirs/public.yml $init_file
+	#write file with 'demo' as default wiki
+	#sudo cp -f $config_file_dirs/public.yml $init_file
  # else
     # echo -e "${ok}${NC}Checksum OK"
  # fi
