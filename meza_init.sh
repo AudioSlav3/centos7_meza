@@ -43,7 +43,9 @@ check_hash () {
     return 1
   fi
 }
-
+update_meza_config () {
+  meza deploy monolith --tags mediawiki --skip-tags latest,update.php,verify-wiki,smw-data,search-index,parsoid,mediawiki-core
+}
 #################################
 ##### BASE MEZA Install
 install_meza_base () {
@@ -153,4 +155,5 @@ add_wikis () {
 #################################
 install_meza_base
 meza_public_init
+  update_meza_config
 add_wikis
