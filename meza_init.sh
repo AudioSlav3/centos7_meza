@@ -46,6 +46,10 @@ check_hash () {
 update_meza_config () {
   sudo meza deploy monolith --tags mediawiki --skip-tags latest,update.php,verify-wiki,smw-data,search-index,parsoid,mediawiki-core
 }
+update_meza_ext () {
+  sudo meza deploy monolith --tags mediawiki --skip-tags mediawiki-core,verify-wiki
+}
+
 #################################
 ##### BASE MEZA Install
 install_meza_base () {
@@ -57,6 +61,19 @@ install_meza_base () {
 	sudo meza deploy monolith
 	
 	touch ${HOME}/meza_base.done
+  done
+}
+
+install_mediawiki_extensions () {
+  while ! test -f "${HOME}/mediawiki_extension.done"; do 
+    ext_path="/opt/htdocs/mediawiki/extensions"
+    #Cargo 2.8 supportable up to MediaWiki 1.29. This is required before calling via LocalExtensions 
+    wget https://github.com/wikimedia/mediawiki-extensions-Cargo/archive/2.8.zip -O cargo_2.8.zip
+	sudo unzip cargo_2.8.zip -d $ext_path/
+	sudo mv $ext_path/mediawiki-extensions-Cargo-2.8 $ext_path/Cargo
+	
+	
+	sudo chown meza-ansible:wheel $ext_path/* -R
   done
 }
 
@@ -154,6 +171,6 @@ add_wikis () {
 ##### END   
 #################################
 install_meza_base
-meza_public_init
-  update_meza_config
-add_wikis
+#meza_public_init
+#  update_meza_config
+#add_wikis

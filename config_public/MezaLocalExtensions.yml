@@ -18,9 +18,9 @@ list:
 
   # This will be installed on all wikis and eventually will be part of core
   # Meza, but for now OSO is testing it.
-  # - name: DisplayTitle
-    # repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DisplayTitle.git
-    # version: "tags/1.2"
+  - name: DisplayTitle
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DisplayTitle.git
+    version: "tags/1.2"
 
   # Allows for custom sidebar based on user page or assigned group.
   # - name: DynamicSidebar
