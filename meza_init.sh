@@ -60,9 +60,9 @@ install_meza_base () {
 
 #################################
 ##### MISC Settings
-update_misc_settings () {
+# update_misc_settings () {
 
-}
+# }
 update_mediawiki_extensions () {
 cd /opt/htdocs/mediawiki
 sudo su meza-ansible -c "/usr/local/bin/composer update"
