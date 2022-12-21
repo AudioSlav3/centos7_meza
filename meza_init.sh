@@ -125,6 +125,7 @@ add_wikis () {
  header_wikis=()
  middle_wikis=()
  footer_wikis=()
+ cfg_updt=1
 # header_wikis+=('  - demo'\\n)
  echo -e "${cyan}File Contents:${NC}"
  while IFS='|' read -r wikisection wikiid wikititle
@@ -135,37 +136,42 @@ add_wikis () {
 	  case $wikiid in 
 	    poic)
 		  sudo meza create wiki-promptless monolith $wikiid "HOSC Wiki"
+		  cfg_updt=0
 		;;
 		science)
 		  sudo meza create wiki-promptless monolith $wikiid "Science"
+		  cfg_updt=0
 		;;
 		cadre)
 		  sudo meza create wiki-promptless monolith $wikiid "POIC Cadre"
+		  cfg_updt=0
 		;;
 	  esac
 	  #sudo meza create wiki-promptless monolith $wikiid '"'$wikititle'"'
 	  sudo cp $delta_config_file_dirs/wikis/$wikiid/* /opt/conf-meza/public/wikis/$wikiid/
 	fi 
-	if [ "$wikisection" = "header" ]; then  
-		header_wikis+=(${wikiid})
-	fi
-	if [ "$wikisection" = "middle" ]; then  
-		middle_wikis+=(${wikiid})
-	fi
-	if [ "$wikisection" = "footer" ]; then  
-		footer_wikis+=(${wikiid})
-	fi
+	# if [ "$wikisection" = "header" ]; then  
+		# header_wikis+=(${wikiid})
+	# fi
+	# if [ "$wikisection" = "middle" ]; then  
+		# middle_wikis+=(${wikiid})
+	# fi
+	# if [ "$wikisection" = "footer" ]; then  
+		# footer_wikis+=(${wikiid})
+	# fi
   fi
  done < $variable_dirs/wikis.txt
 #header_wikis+=(\\n)
 #footer_wikis+=(\\n)
- echo -e "${cyan}Header Wikis:${NC}"
- echo '"'${header_wikis[@]}'"'
- echo -e "${cyan}Middle Wikis:${NC}"
- echo '"'${middle_wikis[@]}'"'
- echo -e "${cyan}Footer Wikis:${NC}"
- echo '"'${footer_wikis[@]}'"'
- update_meza_config
+ # echo -e "${cyan}Header Wikis:${NC}"
+ # echo '"'${header_wikis[@]}'"'
+ # echo -e "${cyan}Middle Wikis:${NC}"
+ # echo '"'${middle_wikis[@]}'"'
+ # echo -e "${cyan}Footer Wikis:${NC}"
+ # echo '"'${footer_wikis[@]}'"'
+ if $cfg_updt; then 
+   update_meza_config
+ fi
 # sed -n "/blender_header_wikis:/{p;:a;N;/\n# blender_middle_wiki_title/!ba;s/.*\n/${header_wikis[*]}\n/};p" /opt/conf-meza/public/public.yml
 # sed -n "/blender_footer_wikis:/{p;:a;N;/\n# blender_footer_wikis/!ba;s/.*\n/${footer_wikis[*]}\n/};p" /opt/conf-meza/public/public.yml
 }
@@ -174,6 +180,15 @@ add_wikis () {
 #################################
 ##### START 
 
+#################################
+##### START Write public files
+meza_public_updt () {
+ while ! test -f "${HOME}/meza_config_updt.done"; do 
+   sudo rsync -av --exclude="$delta_config_file_dirs/wikis" $delta_config_file_dirs /opt/conf-meza/public/
+ 
+   update_meza_config
+   touch ${HOME}/meza_config_updt.done
+ done
 ##### END   
 #################################
 ##### START 
@@ -188,3 +203,4 @@ install_meza_base
 install_mediawiki_extensions
 meza_public_init
 add_wikis
+meza_public_updt
