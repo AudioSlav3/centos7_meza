@@ -41,7 +41,7 @@ while ! test -f "${HOME}/ssh.done"; do
     echo -e "${info}#### PERFORM THE FOLLOWING ON YOUR HOST MACHINE ###${NC}"
     echo -e "${info}## open pterm.exe (Putty windows command line) ${NC}"
     echo -e "${info}## run the following ${NC}"
-    echo -e "${info}## ${purple}pscp.exe ${white}..\..\NASAWiki\\\vmbuild\\\\${purple}add_ssh.sh${white} ${USER}@$(hostname -I|xargs):${HOME}${NC}"
+    echo -e "${info}## ${purple}pscp.exe ${white}..\..\NASAWiki\\\vmcommon\\\\${purple}add_ssh.sh${white} ${USER}@$(hostname -I|xargs):${HOME}${NC}"
     echo -e "${info}######################################${NC}"
     echo -e "${brown} Press [ENTER] ONLY AFTER completing ALL of the above.${NC}" 
     read ans
@@ -66,8 +66,9 @@ EOF
 update_packages () {
  while ! test -f "${HOME}/pkg.done"; do 
 	 myNewPackages=()
-	 sudo yum update -q
-	 centos_7_vbox="gcc make perl bzip2 kernel-headers-$(uname -r) kernel-devel-$(uname -r) elfutils-libelf-devel xorg-x11-drivers xorg-x11-util"
+	 sudo yum -y install deltarpm
+	 sudo yum update -q -y
+	 centos_7_vbox="gcc make perl bzip2 kernel-headers kernel-devel-$(uname -r) elfutils-libelf-devel xorg-x11-drivers xorg-x11-utils libXt.x86_64"
 	 centos_7=$centos_7_vbox" screen git nano zip unzip php74-pecl-zip.x86_64 dialog wget"
 	 
 	 centos_8_vbox="tar gcc make perl bzip2 kernel-headers-$(uname -r) kernel-devel-$(uname -r) elfutils-libelf-devel xorg-x11-drivers xorg-x11-utils.x86_64 libXt.x86_64"
@@ -100,7 +101,9 @@ update_packages () {
 
 install_VBoxGuest () {
  #Mount and install Guest Additions
- sudo mkdir /cdrom
+ if ! test -d /cdrom ; then
+   sudo mkdir /cdrom
+ fi
  while ! test -f "${HOME}/vbox.done"; do 
  rom_array=($(ls /dev/sr*))
  len=${#rom_array[@]}
