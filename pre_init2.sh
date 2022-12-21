@@ -56,10 +56,7 @@ done
 #################################
 ##### MISC Settings
 update_misc_settings () {
-sudo cat << 'EOF' > /etc/issue
-\S
-IP Address: \4
-EOF
+sudo sed -i 's/Kernel \\r on an \\m/IP Address: \\4/g' /etc/issue
 }
 #################################
 ##### START Install Packages
@@ -69,7 +66,7 @@ update_packages () {
 	 sudo yum -y install deltarpm
 	 sudo yum update -q -y
 	 centos_7_vbox="gcc make perl bzip2 kernel-headers kernel-devel-$(uname -r) elfutils-libelf-devel xorg-x11-drivers xorg-x11-utils libXt.x86_64"
-	 centos_7=$centos_7_vbox" screen git nano zip unzip php74-pecl-zip.x86_64 dialog wget"
+	 centos_7=$centos_7_vbox" screen git nano zip unzip dialog wget"
 	 
 	 centos_8_vbox="tar gcc make perl bzip2 kernel-headers-$(uname -r) kernel-devel-$(uname -r) elfutils-libelf-devel xorg-x11-drivers xorg-x11-utils.x86_64 libXt.x86_64"
 	 centos_8=$centos_8_vbox" git nano zip unzip dialog"
