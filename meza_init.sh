@@ -118,7 +118,7 @@ add_wikis () {
 	
   fi
  done < $variable_dirs/wikis.txt
- sed -n '/blender_header_wikis:/{p;:a;N;/\n# blender_middle_wiki_title/!ba;s/.*\n/${header_wikis[*]}\n/};p' /opt/conf-meza/public/public.yml
+ sed -n "/blender_header_wikis:/{p;:a;N;/\n# blender_middle_wiki_title/!ba;s/.*\n/${header_wikis[*]}\n/};p" /opt/conf-meza/public/public.yml
 }
 
 ##### END   
