@@ -176,4 +176,4 @@ add_wikis () {
 install_meza_base
 install_mediawiki_extensions
 meza_public_init
-add_wikis
+#add_wikis
