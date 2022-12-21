@@ -189,6 +189,7 @@ meza_public_updt () {
    update_meza_config
    touch ${HOME}/meza_config_updt.done
  done
+}
 ##### END   
 #################################
 ##### START 
