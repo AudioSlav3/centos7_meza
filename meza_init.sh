@@ -63,11 +63,11 @@ install_meza_base () {
 # update_misc_settings () {
 
 # }
-update_mediawiki_extensions () {
-cd /opt/htdocs/mediawiki
-sudo su meza-ansible -c "/usr/local/bin/composer update"
-}
-##### END Install Packages
+# update_mediawiki_extensions () {
+# cd /opt/htdocs/mediawiki
+# sudo su meza-ansible -c "/usr/local/bin/composer update"
+# }
+##### END
 #################################
 ##### START Write public files
 meza_public_update () {
@@ -94,7 +94,13 @@ EOF
 }
 ##### END   Write public files
 #################################
-##### START 
+##### START WIKI Deploy
+add_wikis () {
+while IFS='|' read -r wikisection wikiid wikititle
+do
+  echo "$wikisection, $wikiid, $wikititle"
+done < $config_file_dirs/wikis.txt
+}
 
 ##### END   
 #################################
@@ -111,5 +117,6 @@ EOF
 ##### END   
 #################################
 install_meza_base
+add_wikis
 #update_packages
 #meza_public_update
