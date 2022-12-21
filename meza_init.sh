@@ -97,7 +97,7 @@ EOF
 add_wikis () {
 while IFS='|' read -r wikisection wikiid wikititle
 do
-  if ! $(grep -q "#" $wikisection); then 
+  if ! $(echo $wikisection | grep -q "#"); then 
     echo "$wikisection, $wikiid, $wikititle"
   fi
 done < $config_file_dirs/wikis.txt
