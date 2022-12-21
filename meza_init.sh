@@ -66,14 +66,10 @@ install_meza_base () {
 
 install_mediawiki_extensions () {
   while ! test -f "${HOME}/mediawiki_extension.done"; do 
-    ext_path="/opt/htdocs/mediawiki/extensions"
-    #Cargo 2.8 supportable up to MediaWiki 1.29. This is required before calling via LocalExtensions 
-    wget https://github.com/wikimedia/mediawiki-extensions-Cargo/archive/2.8.zip -O cargo_2.8.zip
-	sudo unzip cargo_2.8.zip -d $ext_path/
-	sudo mv $ext_path/mediawiki-extensions-Cargo-2.8 $ext_path/Cargo
+    sudo cp $config_file_dirs/MezaLocalExtensions.yml /opt/conf-meza/public/
+	update_meza_ext
 	
-	
-	sudo chown meza-ansible:wheel $ext_path/* -R
+	touch ${HOME}/mediawiki_extension.done
   done
 }
 
@@ -94,11 +90,11 @@ install_mediawiki_extensions () {
 ##### START Write public files
 meza_public_init () {
  while ! test -f "${HOME}/meza_config_init.done"; do 
- sudo cp -Rf $config_file_dirs/* /opt/conf-meza/public/
+ sudo cp -R $config_file_dirs/* /opt/conf-meza/public/
  
  # if ! check_hash $config_file_dirs/public.yml $init_file ; then
     # echo -e "${warn}${NC}Checksum failed, fixing"
-	#write file with 'demo' as default wiki
+	###write file with 'demo' as default wiki
 	#sudo cp -f $config_file_dirs/public.yml $init_file
  # else
     # echo -e "${ok}${NC}Checksum OK"
@@ -108,7 +104,7 @@ meza_public_init () {
   # init_file=/opt/conf-meza/public/primewiki
  # if [[ ! $(echo "$init_public_yml $init_file" | sha1sum -c ) ]]; then
     # echo -e "${warn}${NC}Checksum failed, fixing"
-	write file with 'demo' as default wiki
+	###write file with 'demo' as default wiki
 	
 	# cat << 'EOF' > ${init_file}
 # demo
@@ -116,6 +112,7 @@ meza_public_init () {
  # else
     # echo -e "${ok}${NC}Checksum OK"	
  # fi
+ update_meza_config
  touch ${HOME}/meza_config_init.done
  done
 }
@@ -171,6 +168,6 @@ add_wikis () {
 ##### END   
 #################################
 install_meza_base
-#meza_public_init
-#  update_meza_config
+install_mediawiki_extensions
+meza_public_init
 #add_wikis
