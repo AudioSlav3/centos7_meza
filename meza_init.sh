@@ -28,8 +28,10 @@ warn="[${YELLOW}WARN${NC}] "
 
 #
 # Config File Variables
-config_file_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/public_meza"
+variable_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/public_meza"
+config_file_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/config_public"
 
+# Function to compare hashes
 check_hash () {
   source_file=$1
   dest_file=$2
@@ -67,9 +69,12 @@ install_meza_base () {
 # sudo su meza-ansible -c "/usr/local/bin/composer update"
 # }
 ##### END
+
+
 #################################
 ##### START Write public files
 meza_public_init () {
+ while ! test -f "${HOME}/meza_config_init.done"; do 
  if ! check_hash $config_file_dirs/public.yml $init_file ; then
     echo -e "${warn}${NC}Checksum failed, fixing"
 	#write file with 'demo' as default wiki
@@ -90,17 +95,30 @@ EOF
  else
     echo -e "${ok}${NC}Checksum OK"	
  fi
+ touch ${HOME}/meza_config_init.done
+ done
 }
 ##### END   Write public files
 #################################
 ##### START WIKI Deploy
 add_wikis () {
-while IFS='|' read -r wikisection wikiid wikititle
-do
+ #Read File to use in deploy
+ header_wikis=()
+ footer_wikis=()
+ while IFS='|' read -r wikisection wikiid wikititle
+ do
   if ! $(echo $wikisection | grep -q "#"); then 
     echo "$wikisection, $wikiid, $wikititle"
+	if $wikisection = "header"; then  
+		header_wikis+=( "  - "${wikisection} )
+	fi
+	if $wikisection = "footer"; then  
+		footer_wikis+=( "  - "${wikisection} )
+	fi
+	
   fi
-done < $config_file_dirs/wikis.txt
+ done < $variable_dirs/wikis.txt
+ sed -n '/blender_header_wikis:/{p;:a;N;/\n# blender_middle_wiki_title/!ba;s/.*\n/${header_wikis[*]}\n/};p' /opt/conf-meza/public/public.yml
 }
 
 ##### END   
@@ -119,5 +137,4 @@ done < $config_file_dirs/wikis.txt
 #################################
 install_meza_base
 add_wikis
-#update_packages
-#meza_public_update
+#meza_public_init

@@ -1,3 +1,4 @@
+#pg_section|path_name|wiki_name
 header|poic|"HOSC Wiki"
 middle|science|"Science"
 footer|cadre|"POIC Cadre"
