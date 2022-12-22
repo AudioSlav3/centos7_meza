@@ -36,6 +36,7 @@ if [ $? -eq null ]; then
   echo -e "${err}Missing user information. Use:"
   echo -e "      add_user.sh ${purple}user${NC}"
   exit 2
+fi
 add_admin () {
  echo .
 }
