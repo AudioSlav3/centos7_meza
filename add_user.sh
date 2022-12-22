@@ -43,8 +43,8 @@ add_admin () {
    wikis=()
    wikis=$(ls /opt/conf-meza/public/wikis/ | grep -v demo)
    for t in ${wikis[*]}; do 
-     echo -e "${update}Adding${cyan} ${usr} ${NC}to ${cyan}${t}${NC}"
-     #WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Contributor $usr $default_pswd
+     echo -e "${update}Adding${cyan} ${usr} ${NC}as admin to ${cyan}${t}${NC}"
+     #sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Contributor $usr $default_pswd
    done
    echo -e "${info}${cyan}${usr}${NC}'s default password is${cyan} ${default_pswd} ${NC}"
 }
@@ -55,8 +55,22 @@ add_contributer () {
    wikis=()
    wikis=$(ls /opt/conf-meza/public/wikis/ | grep -v demo)
    for t in ${wikis[*]}; do 
-     echo -e "${update}Adding${cyan} ${usr} ${NC}to ${cyan}${t}${NC}"
-     #WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Contributor $usr $default_pswd
+     echo -e "${update}Adding${cyan} ${usr} ${NC}as contributor to ${cyan}${t}${NC}"
+	 case $t in 
+	   poic)
+	     sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=ndc $usr $default_pswd
+	   ;;
+	   science)
+	     sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=project $usr $default_pswd
+	   ;;
+	   cadre)
+	     sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=cadre $usr $default_pswd
+	   ;;
+	   *)
+	     echo "${t} not defined"
+		 ;;
+	 esac
+	 #sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=Contributor $usr $default_pswd
    done
    echo -e "${info}${cyan}${usr}${NC}'s default password is${cyan} ${default_pswd} ${NC}"
 }

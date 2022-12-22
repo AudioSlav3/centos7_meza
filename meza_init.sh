@@ -64,7 +64,6 @@ install_meza_base () {
     echo -e "${update}Installing MEZA Wiki, this will take a while.${NC}"
     sudo bash /opt/meza/src/scripts/getmeza.sh
 	sudo meza deploy monolith
-	
 	touch ${HOME}/meza_base.done
 	echo -e "${ok}MEZA Wiki installed.${NC}"
   done
@@ -160,10 +159,20 @@ meza_public_updt () {
  else
    echo -e "${update}Copying delta public configs for Wiki.${NC}"
    sudo rsync -av --exclude='wikis' $delta_config_file_dirs/ /opt/conf-meza/public/
-   #set demo wiki for anyone to read
+   #set demo wiki for anyone to access
    echo -e "${update}Updating demo base.php to allow anyone to read Wiki.${NC}"
    sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27anon-read\x27;/g' /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
-   echo -e "${update}Applying config changes.${NC}"
+   #set poic wiki for ndc users to edit
+   echo -e "${update}Updating poic base.php to allow anyone to read Wiki.${NC}"
+   sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27ndc-edit\x27;/g' /opt/conf-meza/public/wikis/poic/preLocalSettings.d/base.php
+   #set science wiki for anyone to edit
+   echo -e "${update}Updating science base.php to allow anyone to read Wiki.${NC}"
+   sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27project-edit\x27;/g' /opt/conf-meza/public/wikis/science/preLocalSettings.d/base.php
+   #set cadre wiki for anyone to edit
+   echo -e "${update}Updating cadre base.php to allow anyone to read Wiki.${NC}"
+   sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27cadre-edit\x27;/g' /opt/conf-meza/public/wikis/cadre/preLocalSettings.d/base.php
+   echo -e "${update}Update LocalSettings.php and update the config.${NC}"
+   sudo cp $variable_dirs/LocalSettings.php /opt/htdocs/mediawiki/
    update_meza_config
    touch ${HOME}/meza_config_updt.done
    echo -e "${ok}Done.${NC}"
