@@ -136,7 +136,7 @@ add_wikis () {
 	  echo -e "${update}Copying icon and image to Wiki${purple} $wikiid${NC}"
 	  sudo cp $delta_config_file_dirs/wikis/$wikiid/* /opt/conf-meza/public/wikis/$wikiid/
 	else
-	   echo -e "${ok}$wikiid already deployed.${NC}"
+	   echo -e "----- ${ok}$wikiid already deployed.${NC}"
 	fi 
   fi
  done < $variable_dirs/wikis.txt
