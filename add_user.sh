@@ -38,8 +38,8 @@ add_admin () {
 
 add_contributer () {
    usr=$1
-   #default_pswd=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-12};echo)
-   default_pswd=$(date +%s | sha256sum | base64 | head -c 32 ; echo)
+   default_pswd2=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-12};echo)
+   default_pswd=$(date +%s | sha256sum | base64 | head -c 14 ; echo)
    wikis=()
    wikis=$(ls /opt/conf-meza/public/wikis/ | grep -v demo)
    for t in ${wikis[*]}; do 
@@ -48,5 +48,6 @@ add_contributer () {
    done
    echo -e "${info}${usr} default password is: ' ${default_pswd} ' ${NC}"
    echo $default_pswd
+   echo $default_pswd2
 }
 add_contributer $1
