@@ -38,13 +38,13 @@ add_admin () {
 
 add_contributer () {
    usr=$1
-   default_pswd=tmp_pswd=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-12};echo)
+   default_pswd=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-12};echo)
    wikis=()
    wikis=$(ls /opt/conf-meza/public/wikis/ | grep -v demo)
    for t in ${wikis[*]}; do 
      echo -e "${update}Creating ${usr} to ${t}${NC}"
      #WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Contributor $usr $default_pswd
    done
-   echo -e "${info}$usr default password is ' $default_pswd '${NC}"
+   echo -e "${info}$usr default password is "'" $default_pswd "'"${NC}"
 }
 add_contributer $1
