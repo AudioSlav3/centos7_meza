@@ -158,16 +158,14 @@ meza_public_updt () {
  if test -f "${HOME}/meza_config_updt.done"; then
    echo -e "${ok}Update to custom public.yml already complete.${NC}"
  else
-   while ! test -f "${HOME}/meza_config_updt.done"; do 
-     echo -e "${update}Copying delta public configs for Wiki.${NC}"
-     sudo rsync -av --exclude='wikis' $delta_config_file_dirs/ /opt/conf-meza/public/    
-     touch ${HOME}/meza_config_updt.done
-   done
+   echo -e "${update}Copying delta public configs for Wiki.${NC}"
+   sudo rsync -av --exclude='wikis' $delta_config_file_dirs/ /opt/conf-meza/public/
    #set demo wiki for anyone to read
    echo -e "${update}Updating demo base.php to allow anyone to read Wiki.${NC}"
    sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27anon-read\x27;/g' /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
    echo -e "${update}Applying config changes.${NC}"
    update_meza_config
+   touch ${HOME}/meza_config_updt.done
    echo -e "${ok}Done.${NC}"
  fi
 }
