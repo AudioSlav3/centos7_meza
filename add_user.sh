@@ -32,14 +32,14 @@ if [ "$EUID" -eq 0 ]; then
   exit 1
 fi
 ##### CHECK for parameter 
-if [ $# -eq 0 ]; then
-  echo -e "${err}Missing user information. Use:"
-  echo -e "      add_user.sh ${purple}user${NC}"
-  exit 2
-fi
-add_admin () {
- echo .
-}
+# if [ $# -eq 0 ]; then
+  # echo -e "${err}Missing user information. Use:"
+  # echo -e "      add_user.sh ${purple}user${NC}"
+  # exit 2
+# fi
+# add_admin () {
+ # echo .
+# }
 
 add_contributer () {
    usr=$1
