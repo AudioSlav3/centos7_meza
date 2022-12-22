@@ -47,10 +47,10 @@ add_contributer () {
    #default_pswd="test"
    wikis=()
    wikis=$(ls /opt/conf-meza/public/wikis/ | grep -v demo)
-   # for t in ${wikis[*]}; do 
-     # echo -e "${update}Adding${cyan) ${usr} ${NC}to ${cyan}${t}${NC}"
+   for t in ${wikis[*]}; do 
+     echo -e "${update}Adding${cyan) ${usr} ${NC}to ${cyan}${t}${NC}"
      #WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Contributor $usr $default_pswd
-   # done
+   done
    #echo -e "${info}${cyan}${usr}${NC} default password is${cyan} ${default_pswd} ${NC}"
 }
 add_contributer $1
