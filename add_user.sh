@@ -32,25 +32,44 @@ if [ "$EUID" -eq 0 ]; then
   exit 1
 fi
 ##### CHECK for parameter 
-if [ $# -eq 0 ]; then
+if [ $# -ne 2 ]; then
   echo -e "${err}Missing user information. Use:"
-  echo -e "      add_user.sh ${purple}user${NC}"
+  echo -e "      add_user.sh ${purple}user${NC} (${purple}user${NC}|${purple}admin${NC})${NC}"
   exit 2
 fi
-# add_admin () {
- # echo .
-# }
-
-add_contributer () {
+add_admin () {
    usr=$1
    default_pswd=$(date +%s | sha256sum | base64 | head -c 14 ; echo)
-   #default_pswd="test"
    wikis=()
    wikis=$(ls /opt/conf-meza/public/wikis/ | grep -v demo)
    for t in ${wikis[*]}; do 
      echo -e "${update}Adding${cyan} ${usr} ${NC}to ${cyan}${t}${NC}"
      #WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Contributor $usr $default_pswd
    done
-   echo -e "${info}${cyan}${usr}${NC} default password is${cyan} ${default_pswd} ${NC}"
+   echo -e "${info}${cyan}${usr}${NC}'s default password is${cyan} ${default_pswd} ${NC}"
 }
-add_contributer $1
+
+add_contributer () {
+   usr=$1
+   default_pswd=$(date +%s | sha256sum | base64 | head -c 14 ; echo)
+   wikis=()
+   wikis=$(ls /opt/conf-meza/public/wikis/ | grep -v demo)
+   for t in ${wikis[*]}; do 
+     echo -e "${update}Adding${cyan} ${usr} ${NC}to ${cyan}${t}${NC}"
+     #WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Contributor $usr $default_pswd
+   done
+   echo -e "${info}${cyan}${usr}${NC}'s default password is${cyan} ${default_pswd} ${NC}"
+}
+case $2 in 
+  user)
+    add_contributer $1
+	;;
+  admin)
+    add_admin $1
+	;;
+  *)
+      echo -e "${err}Missing user information. Use:"
+	  echo -e "      add_user.sh ${purple}user${NC} (${purple}user${NC}|${purple}admin${NC})${NC}"
+	  exit 2
+	;;
+esac
