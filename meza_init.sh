@@ -135,6 +135,8 @@ add_wikis () {
 	  esac
 	  echo -e "${update}Copying icon and image to Wiki${purple} $wikiid${NC}"
 	  sudo cp $delta_config_file_dirs/wikis/$wikiid/* /opt/conf-meza/public/wikis/$wikiid/
+	else
+	   echo -e "${ok}$wikiid already deployed.${NC}"
 	fi 
   fi
  done < $variable_dirs/wikis.txt
@@ -142,8 +144,8 @@ add_wikis () {
  if [ "$cfg_updt" = "0" ]; then 
    echo -e "${update}Applying config to apply new images.${NC}"
    update_meza_config
+   echo -e "${ok}Done.${NC}"
  fi
- echo -e "${ok}Done.${NC}"
 }
 
 ##### END   
