@@ -43,7 +43,8 @@ fi
 
 add_contributer () {
    usr=$1
-   default_pswd="$(date +%s | sha256sum | base64 | head -c 14 ; echo)"
+   #default_pswd="$(date +%s | sha256sum | base64 | head -c 14 ; echo)"
+   default_pswd="test"
    wikis=()
    wikis=$(ls /opt/conf-meza/public/wikis/ | grep -v demo)
    for t in ${wikis[*]}; do 
