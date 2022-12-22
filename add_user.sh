@@ -45,6 +45,6 @@ add_contributer () {
      echo -e "${update}Creating ${usr} to ${t}${NC}"
      #WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Contributor $usr $default_pswd
    done
-   echo -e "${info}$usr default password is ' $default_pswd '${NC}"
+   echo -e "${info}${usr} default password is: ${default_pswd} ${NC}"
 }
 add_contributer $1
