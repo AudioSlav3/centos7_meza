@@ -32,7 +32,7 @@ if [ "$EUID" -eq 0 ]; then
   exit 1
 fi
 ##### CHECK for parameter 
-if [ $? -eq null ]; then
+if [ $# -eq 0 ]; then
   echo -e "${err}Missing user information. Use:"
   echo -e "      add_user.sh ${purple}user${NC}"
   exit 2
