@@ -31,7 +31,11 @@ if [ "$EUID" -eq 0 ]; then
   echo -e "${err}Please run as user with sudo privelege"
   exit 1
 fi
-
+##### CHECK for parameter 
+if [ $? -eq null ]; then
+  echo -e "${err}Missing user information. Use:"
+  echo -e "      add_user.sh ${purple}user${NC}"
+  exit 2
 add_admin () {
  echo .
 }
@@ -42,9 +46,9 @@ add_contributer () {
    wikis=()
    wikis=$(ls /opt/conf-meza/public/wikis/ | grep -v demo)
    for t in ${wikis[*]}; do 
-     echo -e "${update}Creating ${usr} to ${t}${NC}"
+     echo -e "${update}Adding${cyan) ${usr} ${NC}to ${cyan}${t}${NC}"
      #WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Contributor $usr $default_pswd
    done
-   echo -e "---- ${info}${purple}${usr}${NC}'s default password is: '${purple} ${default_pswd} ${NC}' ${NC}"
+   echo -e "---- ${info}${cyan}${usr}${NC}'s default password is: '${cyan} ${default_pswd} ${NC}' ${NC}"
 }
 add_contributer $1
