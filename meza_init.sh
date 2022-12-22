@@ -54,45 +54,129 @@ update_meza_ext () {
 #################################
 ##### BASE MEZA Install
 install_meza_base () {
+ if test -f "${HOME}/meza_base.done"; then
+   echo -e "${ok}MEZA Wiki already installed.${NC}"
+ fi
   if ! test -d "/opt/meza"; then
      sudo git clone https://github.com/enterprisemediawiki/meza /opt/meza
   fi
   while ! test -f "${HOME}/meza_base.done"; do 
+    echo -e "${update}Installing MEZA Wiki, this will take a while.${NC}"
     sudo bash /opt/meza/src/scripts/getmeza.sh
 	sudo meza deploy monolith
 	
 	touch ${HOME}/meza_base.done
+	echo -e "${ok}MEZA Wiki installed.${NC}"
   done
 }
-
-install_mediawiki_extensions () {
-  while ! test -f "${HOME}/mediawiki_extension.done"; do 
-    sudo cp $config_file_dirs/MezaLocalExtensions.yml /opt/conf-meza/public/
-	update_meza_ext
-	
-	touch ${HOME}/mediawiki_extension.done
-  done
-}
-
-
 #################################
-##### MISC Settings
-# update_misc_settings () {
-
-# }
-# update_mediawiki_extensions () {
-# cd /opt/htdocs/mediawiki
-# sudo su meza-ansible -c "/usr/local/bin/composer update"
-# }
-##### END
-
+##### Extension Install
+install_mediawiki_extensions () {
+ if test -f "${HOME}/mediawiki_extension.done"; then
+   echo -e "${ok}MEZA Wiki extensions already installed.${NC}"
+ fi
+  while ! test -f "${HOME}/mediawiki_extension.done"; do 
+    echo -e "${info}Installing MEZA Wiki extensions.${NC}"
+	echo -e "${update}Copying MezaLocalExtensions.yml${NC}"
+    sudo cp $config_file_dirs/MezaLocalExtensions.yml /opt/conf-meza/public/
+	echo -e "${update}Installing new Extension${NC}"
+	update_meza_ext	
+	touch ${HOME}/mediawiki_extension.done
+	echo -e "${ok}Done.${NC}"
+  done
+}
 
 #################################
 ##### START Write public files
 meza_public_init () {
+ if test -f "${HOME}/meza_config_init.done"; then
+   echo -e "${ok}Initial custom public.yml already in place.${NC}"
+ fi
  while ! test -f "${HOME}/meza_config_init.done"; do 
- sudo cp -R $config_file_dirs/* /opt/conf-meza/public/
- 
+   echo -e "${info}Configuring MEZA Wiki settings${NC}"
+   echo -e "${update}Copying public.yml${NC}"
+   sudo cp -R $config_file_dirs/* /opt/conf-meza/public/
+   echo -e "${update}Applying new config.${NC}"
+   update_meza_config
+   touch ${HOME}/meza_config_init.done
+   echo -e "${ok}Done.${NC}"
+ done
+}
+##### END   Write public files
+#################################
+##### START WIKI Deploy
+add_wikis () {
+ echo -e "${info}Checking for Wikis to deploy.${NC}"
+ #Read File to use in deploy
+ header_wikis=()
+ middle_wikis=()
+ footer_wikis=()
+ cfg_updt=1
+
+ while IFS='|' read -r wikisection wikiid wikititle
+ do
+  if ! $(echo $wikisection | grep -q "#"); then 
+	if ! test -d "/opt/conf-meza/public/wikis/$wikiid/"; then 
+	  echo -e "${update}Deploying Wiki:${NC}"
+      echo -e "${cyan}        $wikiid, $wikititle${NC}"
+	  case $wikiid in 
+	    poic)
+		  sudo meza create wiki-promptless monolith $wikiid "HOSC Wiki"
+		  cfg_updt=0
+		;;
+		science)
+		  sudo meza create wiki-promptless monolith $wikiid "Science"
+		  cfg_updt=0
+		;;
+		cadre)
+		  sudo meza create wiki-promptless monolith $wikiid "POIC Cadre"
+		  cfg_updt=0
+		;;
+	  esac
+	  echo -e "${update}Copying icon and image to Wiki${purple} $wikiid${NC}"
+	  sudo cp $delta_config_file_dirs/wikis/$wikiid/* /opt/conf-meza/public/wikis/$wikiid/
+	fi 
+  fi
+ done < $variable_dirs/wikis.txt
+
+ if [ "$cfg_updt" = "0" ]; then 
+   echo -e "${update}Applying config to apply new images.${NC}"
+   update_meza_config
+ fi
+ echo -e "${ok}Done.${NC}"
+}
+
+##### END   
+#################################
+##### START 
+
+#################################
+##### START Write public files
+meza_public_updt () {
+ if test -f "${HOME}/meza_config_updt.done"; then
+   echo -e "${ok}Update to custom public.yml already complete.${NC}"
+ else
+   while ! test -f "${HOME}/meza_config_updt.done"; do 
+     echo -e "${update}Copying delta public configs for Wiki.${NC}"
+     sudo rsync -av --exclude='wikis' $delta_config_file_dirs/ /opt/conf-meza/public/    
+     touch ${HOME}/meza_config_updt.done
+   done
+   #set demo wiki for anyone to read
+   echo -e "${update}Updating demo base.php to allow anyone to read Wiki.${NC}"
+   sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27anon-read\x27;/g' /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
+   echo -e "${update}Applying config changes.${NC}"
+   update_meza_config
+   echo -e "${ok}Done.${NC}"
+ fi
+}
+##### END   
+#################################
+##### START 
+
+##### END   
+#################################
+##### START CODE HOLD
+
  # if ! check_hash $config_file_dirs/public.yml $init_file ; then
     # echo -e "${warn}${NC}Checksum failed, fixing"
 	###write file with 'demo' as default wiki
@@ -113,43 +197,12 @@ meza_public_init () {
  # else
     # echo -e "${ok}${NC}Checksum OK"	
  # fi
- update_meza_config
- touch ${HOME}/meza_config_init.done
- done
-}
-##### END   Write public files
-#################################
-##### START WIKI Deploy
-add_wikis () {
- #Read File to use in deploy
- header_wikis=()
- middle_wikis=()
- footer_wikis=()
- cfg_updt=1
+ 
+ 
+ 
+ 
 # header_wikis+=('  - demo'\\n)
- echo -e "${cyan}File Contents:${NC}"
- while IFS='|' read -r wikisection wikiid wikititle
- do
-  if ! $(echo $wikisection | grep -q "#"); then 
-    echo "$wikisection, $wikiid, $wikititle"
-	if ! test -d "/opt/conf-meza/public/wikis/$wikiid/"; then 
-	  case $wikiid in 
-	    poic)
-		  sudo meza create wiki-promptless monolith $wikiid "HOSC Wiki"
-		  cfg_updt=0
-		;;
-		science)
-		  sudo meza create wiki-promptless monolith $wikiid "Science"
-		  cfg_updt=0
-		;;
-		cadre)
-		  sudo meza create wiki-promptless monolith $wikiid "POIC Cadre"
-		  cfg_updt=0
-		;;
-	  esac
-	  #sudo meza create wiki-promptless monolith $wikiid '"'$wikititle'"'
-	  sudo cp $delta_config_file_dirs/wikis/$wikiid/* /opt/conf-meza/public/wikis/$wikiid/
-	fi 
+	  #sudo meza create wiki-promptless monolith $wikiid '"'$wikititle'"' 
 	# if [ "$wikisection" = "header" ]; then  
 		# header_wikis+=(${wikiid})
 	# fi
@@ -159,8 +212,6 @@ add_wikis () {
 	# if [ "$wikisection" = "footer" ]; then  
 		# footer_wikis+=(${wikiid})
 	# fi
-  fi
- done < $variable_dirs/wikis.txt
 #header_wikis+=(\\n)
 #footer_wikis+=(\\n)
  # echo -e "${cyan}Header Wikis:${NC}"
@@ -169,38 +220,11 @@ add_wikis () {
  # echo '"'${middle_wikis[@]}'"'
  # echo -e "${cyan}Footer Wikis:${NC}"
  # echo '"'${footer_wikis[@]}'"'
- if [ "$cfg_updt" = "0" ]; then 
-   update_meza_config
- fi
 # sed -n "/blender_header_wikis:/{p;:a;N;/\n# blender_middle_wiki_title/!ba;s/.*\n/${header_wikis[*]}\n/};p" /opt/conf-meza/public/public.yml
 # sed -n "/blender_footer_wikis:/{p;:a;N;/\n# blender_footer_wikis/!ba;s/.*\n/${footer_wikis[*]}\n/};p" /opt/conf-meza/public/public.yml
-}
-
-##### END   
-#################################
-##### START 
-
-#################################
-##### START Write public files
-meza_public_updt () {
- while ! test -f "${HOME}/meza_config_updt.done"; do 
-   sudo rsync -av --exclude='wikis' $delta_config_file_dirs/ /opt/conf-meza/public/
-    
-   touch ${HOME}/meza_config_updt.done
- done
- #set demo wiki for anyone to read
- sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27anon-read\x27;/g' /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
- update_meza_config
-}
-##### END   
-#################################
-##### START 
-
-##### END   
-#################################
-##### START 
-
-##### END   
+ 
+ 
+##### END   CODE HOLD
 #################################
 install_meza_base
 install_mediawiki_extensions

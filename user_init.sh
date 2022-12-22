@@ -36,6 +36,9 @@ adminuser=null
 #################################
 ##### SSH Key
 update_ssh () {
+ if test -f "${HOME}/ssh.done"; then
+   echo -e "${ok}SSH update already complete.${NC}"
+ fi
 while ! test -f "${HOME}/ssh.done"; do 
   if ! test -f "${HOME}/add_ssh.sh"; then
     echo -e "${info}#### PERFORM THE FOLLOWING ON YOUR HOST MACHINE ###${NC}"
@@ -47,16 +50,21 @@ while ! test -f "${HOME}/ssh.done"; do
     read ans
   fi
   if test -f "${HOME}/add_ssh.sh"; then
+    echo -e "${update}Adding SSH Key.${NC}"
     bash ${HOME}/add_ssh.sh
 	touch ${HOME}/ssh.done
-    echo -e "${update}Added SSH Key, you may verify your config by attempting to ssh with key.${NC}"
+    echo -e "${ok}Added SSH Key, you may verify your config by attempting to ssh with key.${NC}"
   fi
 done
 }
 #################################
 ##### MISC Settings
 update_misc_settings () {
+ if test -f "${HOME}/misc.done"; then
+   echo -e "${ok}Login banner update already complete.${NC}"
+ fi
  while ! test -f "${HOME}/misc.done"; do 
+  echo -e "${update}Updating Login Banner.${NC}"
   sudo sed -i 's/Kernel \\r on an \\m/IP Address: \\4/g' /etc/issue
   touch ${HOME}/misc.done
  done
@@ -64,6 +72,9 @@ update_misc_settings () {
 #################################
 ##### START Install Packages
 update_packages () {
+ if test -f "${HOME}/pkg.done"; then
+   echo -e "${ok}Packages already installed.${NC}"
+ fi
  while ! test -f "${HOME}/pkg.done"; do 
 	 myNewPackages=()
 	 sudo yum -y install deltarpm
@@ -96,11 +107,15 @@ update_packages () {
 	  echo -e "${ok}${GREEN}No Packages to Install${NC}"
 	 fi
 	 touch ${HOME}/pkg.done
+	 echo -e "${ok}Package installation complete.${NC}"
  done
 }
 
 install_VBoxGuest () {
  #Mount and install Guest Additions
+ if test -f "${HOME}/vbox.done"; then
+   echo -e "${ok}VBoxGuestAdditions installed.${NC}"
+ fi
  if ! test -d /cdrom ; then
    sudo mkdir /cdrom
  fi
@@ -133,8 +148,8 @@ update_misc_settings
 update_packages
 install_VBoxGuest
 if test -f "${HOME}/ssh.done" && test -f "${HOME}/misc.done" && test -f "${HOME}/pkg.done" && test -f "${HOME}/vbox.done"; then 
-  echo -e "${ok}All user settings applied"
+  echo -e "${ok}All user settings applied${NC}"
   echo -e "${cyan} Ready to run meza_init.sh${NC}"
 else
-  echo -e "${warn}Not all applied, check settings before proceeding."
+  echo -e "${warn}Not all applied, check settings before proceeding.${NC}"
 fi

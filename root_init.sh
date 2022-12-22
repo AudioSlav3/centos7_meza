@@ -36,9 +36,11 @@ adminuser=null
 #################################
 ##### Add user to sudoers
 update_sudo () {
+ echo -e "${info}Checking if user is already in sudoers.${NC}"
  if test -f "${HOME}/sudo.done"; then
-   echo -e "${ok}Nothing to do.${NC}"
-   	echo -e "${cyan} If not already done, login and run user_init.sh as user with sudo priveledges.${NC}"
+   echo -e "${ok}This appears to already have been ran. If need to run again, rm ${HOME}/sudo.done and run again.${NC}"
+   echo -e "${cyan} If not already done, login and run user_init.sh as user with sudo priveledges.${NC}"
+   exit 2
  fi
  while ! test -f "${HOME}/sudo.done"; do 
   sudouser=()
@@ -61,23 +63,23 @@ update_sudo () {
     sudo visudo
     read ans
   else 
-    adminuser=${sudouser[0]}
+    adminuser=${sudouser[0]}  
+	echo -e "${update}Adding ${sudouser[0]} to sudoers${NC}"
     echo "${sudouser[0]} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/${adminuser}
     chown root:root /etc/sudoers.d/${adminuser}
   fi
   if $(cat /etc/sudoers | grep -q ${adminuser}) || test -f "/etc/sudoers.d/${adminuser}" ; then
     touch ${HOME}/sudo.done
   fi
-
-   if $(sudo -l -U ${adminuser}|grep -q "(ALL) NOPASSWD: ALL"); then
+  if $(sudo -l -U ${adminuser}|grep -q "(ALL) NOPASSWD: ALL"); then
     echo -e "${ok}Successfully added ${adminuser} to sudoers${NC}"
 	echo -e "${cyan} Run user_init.sh as ${adminuser}${NC}"
-   fi
+  fi
  done
 }
 update_sudo
 if test -f "${HOME}/sudo.done"; then 
-  echo -e "${ok}Done."
+  echo -e "${ok}Done.${NC}"
 else
   echo -e "${warn}Not all applied, check settings before proceeding."
 fi
