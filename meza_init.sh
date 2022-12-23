@@ -172,7 +172,11 @@ meza_public_updt () {
    echo -e "${update}Updating cadre base.php to allow anyone to read Wiki.${NC}"
    sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27cadre-edit\x27;/g' /opt/conf-meza/public/wikis/cadre/preLocalSettings.d/base.php
    echo -e "${update}Update LocalSettings.php and update the config.${NC}"
-   sudo cp $variable_dirs/LocalSettings.php /opt/htdocs/mediawiki/
+   #### TEST
+   if ! $(cat /opt/htdocs/mediawiki/LocalSettings.php | grep -q "ndc-edit"); then 
+     sudo sed -i "/viewer-read/e cat $variable_dirs/LocalSettings.txt" /opt/htdocs/mediawiki/LocalSettings.php
+     #sudo cp $variable_dirs/LocalSettings.php /opt/htdocs/mediawiki/
+   fi
    update_meza_config
    touch ${HOME}/meza_config_updt.done
    echo -e "${ok}Done.${NC}"
