@@ -112,33 +112,47 @@ add_wikis () {
  footer_wikis=()
  cfg_updt=1
 
- while IFS='|' read -r wikisection wikiid wikititle
+ for wikiid in poic science cadre
  do
-  if ! $(echo $wikisection | grep -q "#"); then 
 	if ! test -d "/opt/conf-meza/public/wikis/$wikiid/"; then 
 	  echo -e "${update}Deploying Wiki:${NC}"
       echo -e "${cyan}        $wikiid, $wikititle${NC}"
 	  case $wikiid in 
 	    poic)
 		  sudo meza create wiki-promptless monolith $wikiid "HOSC Wiki"
+		  echo -e "${update}Copying icon and image to Wiki${purple} $wikiid${NC}"
+		  sudo cp $delta_config_file_dirs/wikis/$wikiid/* /opt/conf-meza/public/wikis/$wikiid/
+	      #set poic wiki for ndc users to edit
+	      echo -e "${update}Updating poic base.php to allow anyone with NDC to read Wiki.${NC}"
+	      sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27ndc-edit\x27;/g' /opt/conf-meza/public/wikis/poic/preLocalSettings.d/base.php
+		  cat $variable_dirs/HOSC_perm.txt | sudo tee -a /opt/conf-meza/public/wikis/$wikiid/preLocalSettings.d/base.php
 		  cfg_updt=0
 		;;
 		science)
 		  sudo meza create wiki-promptless monolith $wikiid "Science"
+		  echo -e "${update}Copying icon and image to Wiki${purple} $wikiid${NC}"
+		  sudo cp $delta_config_file_dirs/wikis/$wikiid/* /opt/conf-meza/public/wikis/$wikiid/
+		  #set science wiki for PD and Cadre to edit
+		  echo -e "${update}Updating science base.php to allow NDC to read and only PD and Cadre to edit Wiki.${NC}"
+		  sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27project-edit\x27;/g' /opt/conf-meza/public/wikis/science/preLocalSettings.d/base.php
+		  cat $variable_dirs/Sci_perm.txt | sudo tee -a /opt/conf-meza/public/wikis/$wikiid/preLocalSettings.d/base.php
 		  cfg_updt=0
 		;;
 		cadre)
 		  sudo meza create wiki-promptless monolith $wikiid "POIC Cadre"
+		  echo -e "${update}Copying icon and image to Wiki${purple} $wikiid${NC}"
+		  sudo cp $delta_config_file_dirs/wikis/$wikiid/* /opt/conf-meza/public/wikis/$wikiid/
+		  #set cadre wiki for anyone to edit
+		  echo -e "${update}Updating cadre base.php to allow only Cadre to read/edit Wiki.${NC}"
+		  sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27cadre-edit\x27;/g' /opt/conf-meza/public/wikis/cadre/preLocalSettings.d/base.php
+		  cat $variable_dirs/Cadre_perm.txt | sudo tee -a /opt/conf-meza/public/wikis/$wikiid/preLocalSettings.d/base.php
 		  cfg_updt=0
 		;;
 	  esac
-	  echo -e "${update}Copying icon and image to Wiki${purple} $wikiid${NC}"
-	  sudo cp $delta_config_file_dirs/wikis/$wikiid/* /opt/conf-meza/public/wikis/$wikiid/
 	else
 	   echo -e "----- ${ok}$wikiid already deployed.${NC}"
 	fi 
-  fi
- done < $variable_dirs/wikis.txt
+ done
 
  if [ "$cfg_updt" = "0" ]; then 
    echo -e "${update}Applying config to apply new images.${NC}"
@@ -162,21 +176,6 @@ meza_public_updt () {
    #set demo wiki for anyone to access
    echo -e "${update}Updating demo base.php to allow anyone to read Wiki.${NC}"
    sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27anon-read\x27;/g' /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
-   #set poic wiki for ndc users to edit
-   echo -e "${update}Updating poic base.php to allow anyone to read Wiki.${NC}"
-   sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27ndc-edit\x27;/g' /opt/conf-meza/public/wikis/poic/preLocalSettings.d/base.php
-   #set science wiki for anyone to edit
-   echo -e "${update}Updating science base.php to allow anyone to read Wiki.${NC}"
-   sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27project-edit\x27;/g' /opt/conf-meza/public/wikis/science/preLocalSettings.d/base.php
-   #set cadre wiki for anyone to edit
-   echo -e "${update}Updating cadre base.php to allow anyone to read Wiki.${NC}"
-   sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27cadre-edit\x27;/g' /opt/conf-meza/public/wikis/cadre/preLocalSettings.d/base.php
-   echo -e "${update}Update LocalSettings.php and update the config.${NC}"
-   #### TEST
-   if ! $(cat /opt/htdocs/mediawiki/LocalSettings.php | grep -q "ndc-edit"); then 
-     sudo sed -i "/viewer-read/e cat $variable_dirs/LocalSettings.txt" /opt/htdocs/mediawiki/LocalSettings.php
-     #sudo cp $variable_dirs/LocalSettings.php /opt/htdocs/mediawiki/
-   fi
    update_meza_config
    touch ${HOME}/meza_config_updt.done
    echo -e "${ok}Done.${NC}"
@@ -187,57 +186,6 @@ meza_public_updt () {
 ##### START 
 
 ##### END   
-#################################
-##### START CODE HOLD
-
- # if ! check_hash $config_file_dirs/public.yml $init_file ; then
-    # echo -e "${warn}${NC}Checksum failed, fixing"
-	###write file with 'demo' as default wiki
-	#sudo cp -f $config_file_dirs/public.yml $init_file
- # else
-    # echo -e "${ok}${NC}Checksum OK"
- # fi
- 
-  
-  # init_file=/opt/conf-meza/public/primewiki
- # if [[ ! $(echo "$init_public_yml $init_file" | sha1sum -c ) ]]; then
-    # echo -e "${warn}${NC}Checksum failed, fixing"
-	###write file with 'demo' as default wiki
-	
-	# cat << 'EOF' > ${init_file}
-# demo
-# EOF
- # else
-    # echo -e "${ok}${NC}Checksum OK"	
- # fi
- 
- 
- 
- 
-# header_wikis+=('  - demo'\\n)
-	  #sudo meza create wiki-promptless monolith $wikiid '"'$wikititle'"' 
-	# if [ "$wikisection" = "header" ]; then  
-		# header_wikis+=(${wikiid})
-	# fi
-	# if [ "$wikisection" = "middle" ]; then  
-		# middle_wikis+=(${wikiid})
-	# fi
-	# if [ "$wikisection" = "footer" ]; then  
-		# footer_wikis+=(${wikiid})
-	# fi
-#header_wikis+=(\\n)
-#footer_wikis+=(\\n)
- # echo -e "${cyan}Header Wikis:${NC}"
- # echo '"'${header_wikis[@]}'"'
- # echo -e "${cyan}Middle Wikis:${NC}"
- # echo '"'${middle_wikis[@]}'"'
- # echo -e "${cyan}Footer Wikis:${NC}"
- # echo '"'${footer_wikis[@]}'"'
-# sed -n "/blender_header_wikis:/{p;:a;N;/\n# blender_middle_wiki_title/!ba;s/.*\n/${header_wikis[*]}\n/};p" /opt/conf-meza/public/public.yml
-# sed -n "/blender_footer_wikis:/{p;:a;N;/\n# blender_footer_wikis/!ba;s/.*\n/${footer_wikis[*]}\n/};p" /opt/conf-meza/public/public.yml
- 
- 
-##### END   CODE HOLD
 #################################
 install_meza_base
 install_mediawiki_extensions

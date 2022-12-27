@@ -1,0 +1,19 @@
+
+//Science (restricted)
+//No anonymous; No NDC or PD; CADRE Read/Write
+
+// no anonymous or ordinary users
+$wgGroupPermissions['*']['read'] = false;
+$wgGroupPermissions['*']['edit'] = false;
+$wgGroupPermissions['user']['read'] = false;
+$wgGroupPermissions['user']['edit'] = false;
+
+// create the CADRE group with write permissions
+$wgGroupPermissions['cadre'] = $wgGroupPermissions['user'];
+$wgGroupPermissions['cadre']['read'] = true;
+$wgGroupPermissions['cadre']['talk'] = true;
+$wgGroupPermissions['cadre']['edit'] = true;
+
+// also explicitly give sysop read since you otherwise end up with
+// a chicken/egg situation prior to giving people PROJECT
+$wgGroupPermissions['sysop']['read'] = true;
