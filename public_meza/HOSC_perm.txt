@@ -1,0 +1,25 @@
+
+//HOSC
+//No anonymous; NDC & PD Read; CADRE Read/Write
+
+// no anonymous or ordinary users
+$wgGroupPermissions['*']['read'] = false;
+$wgGroupPermissions['*']['edit'] = false;
+$wgGroupPermissions['user']['read'] = false;
+$wgGroupPermissions['user']['edit'] = false;
+
+// create the NDC group with read permissions
+$wgGroupPermissions['ndc'] = $wgGroupPermissions['user'];
+$wgGroupPermissions['ndc']['read'] = true;
+$wgGroupPermissions['ndc']['talk'] = true;
+$wgGroupPermissions['ndc']['edit'] = false;
+
+// create the CADRE group with write permissions
+$wgGroupPermissions['cadre'] = $wgGroupPermissions['user'];
+$wgGroupPermissions['cadre']['read'] = true;
+$wgGroupPermissions['cadre']['talk'] = true;
+$wgGroupPermissions['cadre']['edit'] = true;
+
+// also explicitly give sysop read since you otherwise end up with
+// a chicken/egg situation prior to giving people NDC
+$wgGroupPermissions['sysop']['read'] = true;
