@@ -32,58 +32,73 @@ if [ "$EUID" -eq 0 ]; then
   exit 1
 fi
 ##### CHECK for parameter 
-if [ $# -ne 3 ]; then
+if [ $# -ne 2 ]; then
   echo -e "${err}Missing user information. Use:"
-  echo -e "      add_user.sh ${purple}user${NC} (${purple}user${NC}|${purple}admin${NC}) (${purple}poic${NC}|${purple}pd${NC}|${purple}other${NC})${NC}"
+  echo -e "      add_user.sh ${purple}user${NC} (${purple}cadre${NC}|${purple}pd${NC}|${purple}gen_ndc${NC}|${purple}admin${NC}) ${NC}"
   exit 2
 fi
+
 add_admin () {
    usr=$1
-   default_pswd=$(date +%s | sha256sum | base64 | head -c 14 ; echo)
-   wikis=()
-   wikis=$(ls /opt/conf-meza/public/wikis/ | grep -v demo)
-   for t in ${wikis[*]}; do 
-     echo -e "${update}Adding${cyan} ${usr} ${NC}as admin to ${cyan}${t}${NC}"
-     #sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Contributor $usr $default_pswd
-   done
-   echo -e "${info}${cyan}${usr}${NC}'s default password is${cyan} ${default_pswd} ${NC}"
+   wiki=$2
+   echo -e "${update}Adding${cyan} ${usr} ${NC}as admin to ${cyan}${wiki}${NC}"
+   case $wiki in 
+     demo)
+	   sudo WIKI=${wiki} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Viewer $usr $default_pswd
+	   ;;
+     poic)
+       sudo WIKI=${wiki} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=ndc,cadre,pd $usr $default_pswd
+	   ;;
+
 }
 
 add_contributer () {
    usr=$1
-   default_pswd=$(date +%s | sha256sum | base64 | head -c 14 ; echo)
-   wikis=()
-   wikis=$(ls /opt/conf-meza/public/wikis/ | grep -v demo)
-   for t in ${wikis[*]}; do 
-     echo -e "${update}Adding${cyan} ${usr} ${NC}as contributor to ${cyan}${t}${NC}"
-	 case $t in 
+   wiki=$2
+   custom_groups=$3
+   echo -e "${update}Adding${cyan} ${usr} ${NC}as contributor to ${cyan}${t}${NC}"
+   case $t in 
+	   demo)
+	     sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=Viewer $usr $default_pswd
+	   ;;
 	   poic)
 	     sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=ndc $usr $default_pswd
 	   ;;
-	   science)
-	     sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=project $usr $default_pswd
-	   ;;
-	   cadre)
-	     sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=cadre $usr $default_pswd
-	   ;;
+	   # science)
+	     # sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=project $usr $default_pswd
+	   # ;;
+	   # cadre)
+	     # sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=cadre $usr $default_pswd
+	   # ;;
 	   *)
 	     echo "${t} not defined"
-		 ;;
-	 esac
-	 #sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=Contributor $usr $default_pswd
-   done
-   echo -e "${info}${cyan}${usr}${NC}'s default password is${cyan} ${default_pswd} ${NC}"
+	   ;;
+   esac
+
 }
-case $2 in 
-  user)
-    add_contributer $1
+
+default_pswd=$(date +%s | sha256sum | base64 | head -c 14 ; echo)
+wikis=()
+wikis=$(ls /opt/conf-meza/public/wikis/)
+for t in ${wikis[*]}; do 
+ case $2 in 
+  cadre)
+    add_contributer $1 $t cadre
+	;;
+  gen_ndc)
+    add_contributer $1 $t ndc
+	;;
+  pd)
+    add_contributer $1 $t pd
 	;;
   admin)
-    add_admin $1
+    add_admin $1 $t
 	;;
   *)
       echo -e "${err}Missing user information. Use:"
-	  echo -e "      add_user.sh ${purple}user${NC} (${purple}user${NC}|${purple}admin${NC})${NC}"
+	  echo -e "      add_user.sh ${purple}user${NC} (${purple}cadre${NC}|${purple}pd${NC}|${purple}gen_ndc${NC}|${purple}admin${NC}) ${NC}"
 	  exit 2
 	;;
-esac
+ esac
+done
+echo -e "${info}${cyan}${usr}${NC}'s default password is${cyan} ${default_pswd} ${NC}"
