@@ -49,7 +49,7 @@ add_admin () {
      poic)
        sudo WIKI=${wiki} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=ndc,cadre,pd $usr $default_pswd
 	   ;;
-
+   esac
 }
 
 add_contributer () {
