@@ -1,0 +1,6 @@
+$wgGroupPermissions['*']['read'] = true;
+$wgGroupPermissions['*']['edit'] = false;
+$wgGroupPermissions['user']['read'] = true;
+$wgGroupPermissions['user']['edit'] = false;
+$wgGroupPermissions['sysop']['read'] = true;
+$wgGroupPermissions['sysop']['edit'] = true;

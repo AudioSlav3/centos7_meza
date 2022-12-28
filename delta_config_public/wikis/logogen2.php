@@ -26,6 +26,8 @@ echo "Creating logo...\n";
 echo shell_exec( "convert $original -resize 160x160 $wiki/logo.png" );
 
 echo "Creating favicon...\n";
+echo shell_exec( "convert $original -resize 128x128 $wiki/favicon.ico" );
+/**
 echo shell_exec( "convert $wiki/logo.png  -bordercolor white -border 0 " .
  // "-clone 0 -resize 16x16 " .
  // "-clone 0 -resize 24x24 " .
@@ -34,5 +36,6 @@ echo shell_exec( "convert $wiki/logo.png  -bordercolor white -border 0 " .
  // "-clone 0 -resize 64x64 " .
  // "-clone 0 -resize 72x72 " .
  "-clone 0 -resize 128x128 " .
- "-delete 0 -alpha off -colors 256 $wiki/favicon.ico" );
+ "-delete 0 -alpha off -colors 256 $wiki/favicon_alt.ico" );
+**/
  ?>

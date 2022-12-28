@@ -31,6 +31,8 @@ warn="[${YELLOW}WARN${NC}] "
 variable_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/public_meza"
 config_file_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/config_public"
 delta_config_file_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/delta_config_public"
+##wiki_list=(poic science cadre)
+wiki_list=(demo poic)
 
 # Function to compare hashes
 check_hash () {
@@ -112,12 +114,21 @@ add_wikis () {
  footer_wikis=()
  cfg_updt=1
 
- for wikiid in poic science cadre
+ for wikiid in ${wiki_list[@]}
  do
 	if ! test -d "/opt/conf-meza/public/wikis/$wikiid/"; then 
 	  echo -e "${update}Deploying Wiki:${NC}"
       echo -e "${cyan}        $wikiid, $wikititle${NC}"
 	  case $wikiid in 
+	    demo)
+		  #set demo wiki for anyone to read
+		  echo -e "${update}Updating demo base.php to allow anyone to read Wiki, but onlly admin to write.${NC}"
+		  cat $variable_dirs/demo_perm.txt | sudo tee -a /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
+		  #sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27anon-read\x27;/g' /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
+		  sudo cp $delta_config_file_dirs/wikis/demo/* /opt/conf-meza/public/wikis/demo/
+		  sudo sed -i "s/Sitename = 'Demo Wiki'/Sitename = 'How To'/g" /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
+		  cfg_updt=0
+		;;
 	    poic)
 		  sudo meza create wiki-promptless monolith $wikiid "HOSC Wiki"
 		  echo -e "${update}Copying icon and image to Wiki${purple} $wikiid${NC}"
@@ -155,32 +166,15 @@ add_wikis () {
  done
 
  if [ "$cfg_updt" = "0" ]; then 
-   echo -e "${update}Applying config to apply new images.${NC}"
-   update_meza_config
-   echo -e "${ok}Done.${NC}"
- fi
-}
-
-##### END   
-#################################
-##### START 
-
-#################################
-##### START Write public files
-meza_public_updt () {
- if test -f "${HOME}/meza_config_updt.done"; then
-   echo -e "${ok}Update to custom public.yml already complete.${NC}"
- else
    echo -e "${update}Copying delta public configs for Wiki.${NC}"
    sudo rsync -av --exclude='wikis' $delta_config_file_dirs/ /opt/conf-meza/public/
-   #set demo wiki for anyone to access
-   echo -e "${update}Updating demo base.php to allow anyone to read Wiki.${NC}"
-   sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27anon-read\x27;/g' /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
+   echo -e "${update}Applying config to apply new images.${NC}"
+   sudo sed -i 's/primary_wiki_id: demo/primary_wiki_id: poic/g' /opt/conf-meza/public/public.yml
    update_meza_config
-   touch ${HOME}/meza_config_updt.done
    echo -e "${ok}Done.${NC}"
  fi
 }
+  
 ##### END   
 #################################
 ##### START 
@@ -191,4 +185,3 @@ install_meza_base
 install_mediawiki_extensions
 meza_public_init
 add_wikis
-meza_public_updt

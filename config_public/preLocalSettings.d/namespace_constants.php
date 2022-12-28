@@ -9,6 +9,10 @@
  * discussion) namespace MUST be the following odd integer.
  *
  **/
+ 
+// Define constants for my additional namespaces.
+define("NS_ACCESSCONTROLGROUP", 730); // This MUST be even.
+define("NS_ACCESSCONTROLGROUP_TALK", 731); // This MUST be the following odd integer.
 
 // Console Handbook
 define( "NS_CHB", 3000 );

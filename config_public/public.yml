@@ -30,21 +30,23 @@ wgPasswordSender: "admin@example.com"
 blender_header_wiki_title: Wikis open to anyone with a NASA AUID
 blender_header_wikis:
   - demo
-  - poic
+  - tutorial
 
-blender_middle_wiki_title: Wikis by project
+blender_middle_wiki_title: Limited Access Wikis
+#blender_middle_wikis:
 
-blender_footer_wiki_title: Group Wikis
-blender_footer_wikis:
-  - pod
-  - oc
-  - paycom
-  - pro
-  - dmc
-  - stowage
-  - mgc
-  - tco
-  - cadre
+  
+# blender_footer_wiki_title: Group Wikis
+# blender_footer_wikis:
+  # - pod
+  # - oc
+  # - paycom
+  # - pro
+  # - dmc
+  # - stowage
+  # - mgc
+  # - tco
+  # - cadre
 
 blender_footer_links:
   - "<a href='https://aeonsp.hosc.msfc.nasa.gov/SitePages/Home.aspx'>AEON Home</a>"

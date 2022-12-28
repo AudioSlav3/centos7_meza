@@ -3,9 +3,17 @@ list:
   # ###################################################################
   # Non NASA Extensions
   # ###################################################################
+  // Override core version. v1.6 last version supported by MW 1.31 
+  - name: ApprovedRevs
+    repo: https://github.com/wikimedia/mediawiki-extensions-ApprovedRevs.git
+    version: tags/1.6
+    config: |
+      $egApprovedRevsAutomaticApprovals = false;
+
+  // v2.8 last version supported by MW 1.31    
   - name: Cargo
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Cargo
-    version: "tags/2.4"
+    version: "tags/2.8"
     config: |
       $smwgEnabledCompatibilityMode = true;
       $wgCargoDefaultQueryLimit = 5000;
@@ -16,47 +24,81 @@ list:
       // $wgCargoAllowedSQLFunctions[] = 'IF';
       // $wgCargoAllowedSQLFunctions[] = 'COALESCE';
 
-  # Overide core Meza Ext
+  - name: CountDownClock
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CountDownClock
+    version: master
+    config: |
+      wfLoadExtension( 'CountDownClock' );
+      
+  // Override core version. v1.5.3 last version supported by MW 1.31
   - name: DisplayTitle
     repo: https://github.com/wikimedia/mediawiki-extensions-DisplayTitle.git
     version: tags/1.5.3
-    
-  # Override / correct Core Meza Ext
-  - name: SemanticExtraSpecialProperties
-    composer: "mediawiki/semantic-extra-special-properties"
-    version: "2.1.0"
-    config: |
-      wfLoadExtension( 'SemanticExtraSpecialProperties' );
       
-  # Allows for custom sidebar based on user page or assigned group.
+  // vREL1_35 last version supported by MW 1.31 
   - name: DynamicSidebar
     repo: https://github.com/wikimedia/mediawiki-extensions-DynamicSidebar.git
     # After this, specifies MW 1.35 is required
-    version: 09addc3c051d91439458a44e6db6f7e992c27121
+    version: REL1_35
     config: |
       $wgDynamicSidebarUseUserpages = true;
       $wgDynamicSidebarUseGroups = true;
+
+  // vREL1_33 last version supported by MW 1.31 
+  - name: EasyTimeline
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/timeline
+    version: REL1_33
+    config: |
+      wfLoadExtension( 'EasyTimeline' );
+
+  // vREL1_38 last version supported by MW 1.31 
+  - name: FlexDiagrams
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/FlexDiagrams
+    version: REL1_38
+    config: |
+      wfLoadExtension( 'FlexDiagrams' );
+
+  // vREL1_34 last version supported by MW 1.31 
+  - name: LoopFunctions
+    repo:  https://gerrit.wikimedia.org/r/mediawiki/extensions/LoopFunctions
+    version: REL1_34
+    config: |
+      wfLoadExtension( 'LoopFunctions' );
 
   - name: MyVariables
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/MyVariables
     version: "tags/3.4.0"
     legacy_load: True
 
+  // v2.1.1 last version supported by MW 1.31 
   - name: Mermaid
     composer: mediawiki/mermaid
     version: "2.1.1"
     config: |
       wfLoadExtension( 'Mermaid' );
       $mermaidgDefaultTheme  = 'forest'; //'forest', 'default', 'neutral', 'dark'
+    
+  - name: Quiz
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Quiz
+    version: master
+    config: |
+      wfLoadExtension( 'Quiz' );
 
-  # - name: SummaryTimeline
-    # repo: https://github.com/darenwelsh/SummaryTimeline.git
-    # version: "tags/v0.2.0"
-    # legacy_load: True
+  // vREL1_37 last version supported by MW 1.31 
+  - name: SemanticACL
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/SemanticACL
+    version: REL1_37
+    config: |
+      wfLoadExtension( 'SemanticACL' );
+      $wgEnablePrivateLinks = false;
+
+  // Override core version. v2.1.0 last version supported by MW 1.31
+  - name: SemanticExtraSpecialProperties
+    composer: "mediawiki/semantic-extra-special-properties"
+    version: "2.1.0"
+    config: |
+      wfLoadExtension( 'SemanticExtraSpecialProperties' );
  
-  # ######################################################################
-  # Testing in Demo
-  # ######################################################################
   - name: Lingo
     composer: "mediawiki/lingo"
     version: "~3.0"
@@ -67,6 +109,12 @@ list:
       $wgMFRemovableClasses = [ 'base' => [ '.mw-lingo-tooltip' ] ];
     # wikis:
       # - demo
+      
+
+  # ######################################################################
+  # Testing in Demo
+  # ######################################################################
+  
   # ######################################################################
   # NASA Extensions
   # ######################################################################
@@ -79,7 +127,7 @@ list:
 
   
   # ######################################################################
-  # TBD FROM NASA
+  # Testing FROM NASA
   # ######################################################################
 
 
@@ -94,3 +142,15 @@ list:
       # - fod
       # - bme
       # - spartan
+
+#  - name: S5SlideShow
+#    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/S5SlideShow
+#    version: REL1_36
+#    config: |
+#      wfLoadExtension( 'S5SlideShow' );
+
+#  - name: Push
+#    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Push
+#    version: REL1_36
+#    config: |
+#      wfLoadExtension( 'Push' );
