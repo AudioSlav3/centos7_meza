@@ -45,7 +45,7 @@ start_menu () {
       wiki_pwd=$(cat dialog.wiki_pwd)
 	  rm dialog.wiki_pwd
     fi
-    dialog --title "Account Type" --radiolist "Which account type is $wiki_user ?" 40 40 6 --no-items admin OFF cadre OFF pd OFF other ON 2>dialog.wiki_account
+    dialog --no-items --title "Account Type" --radiolist "Which account type is $wiki_user ?" 40 40 6 admin OFF cadre OFF pd OFF other ON 2>dialog.wiki_account
     wiki_account=$(cat dialog.wiki_account)
     rm dialog.wiki_account
     
