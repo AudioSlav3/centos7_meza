@@ -33,7 +33,7 @@ config_file_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/config_public
 delta_config_file_dirs="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)/delta_config_public"
 ##wiki_list=(poic science cadre)
 wiki_list=(demo poic)
-
+status=null
 # Function to compare hashes
 check_hash () {
   source_file=$1
