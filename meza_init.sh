@@ -176,8 +176,9 @@ add_wikis () {
 }
 create_admin () {
   default_pswd=$(date +%s | sha256sum | base64 | head -c 14 ; echo)
-  sudo WIKI=demo php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Viewer $usr $default_pswd
-  sudo WIKI=poic php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=ndc,cadre,pd $usr $default_pswd
+  sudo WIKI=demo php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Viewer admin $default_pswd
+  sudo WIKI=poic php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=ndc,cadre,pd admin $default_pswd
+  echo -e "${info}${cyan}admin${NC}'s default password is${cyan} ${default_pswd} ${NC}"
 }
   
 ##### END   
