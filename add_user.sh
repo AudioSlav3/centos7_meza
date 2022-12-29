@@ -155,7 +155,7 @@ start_menu () {
     dialog --no-items --title "Account Type" --radiolist "Which account type is $wiki_user ?" 20 40 6 admin OFF cadre OFF pd OFF other ON 2>dialog.wiki_account
     wiki_account=$(cat dialog.wiki_account)
     rm dialog.wiki_account
-    
+    clear
 	for t in ${wikis[*]}; do 
 	  case ${wiki_account} in 
 		cadre)
@@ -173,6 +173,7 @@ start_menu () {
 			;;
 	  esac
 	done
+	read -p "Press any key to continue"
 	
 	dialog --colors --begin 1 5 --msgbox "[ \Z4INFO\Zn ]: \Z4${wiki_user}\Zn has been added as \Z4${wiki_account}\Zn and has password set to\Z4 ${wiki_pwd} \Zn" 20 40
 	
