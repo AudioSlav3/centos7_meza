@@ -68,7 +68,7 @@ install_meza_base () {
     echo -e "${update}Installing MEZA Wiki, this will take a while.${NC}"
     sudo bash /opt/meza/src/scripts/getmeza.sh
 	sudo meza deploy monolith	
-    if test $status -eq 0; then
+    if [[ $status -eq 0 ]]; then
 	   touch ${HOME}/meza_base.done
 	   echo -e "${ok}MEZA Wiki installed.${NC}"
 	else 
@@ -89,7 +89,7 @@ install_mediawiki_extensions () {
     sudo cp $config_file_dirs/MezaLocalExtensions.yml /opt/conf-meza/public/
 	echo -e "${update}Installing new Extension${NC}"
 	update_meza_ext	
-	if test $status -eq 0; then
+	if [[ $status -eq 0 ]]; then
 		touch ${HOME}/mediawiki_extension.done
 		echo -e "${ok}Done.${NC}"
 	else 
@@ -111,7 +111,7 @@ meza_public_init () {
    sudo cp -R $config_file_dirs/* /opt/conf-meza/public/
    echo -e "${update}Applying new config.${NC}"
    update_meza_config
-   if test $status -eq 0; then
+   if [[ $status -eq 0 ]]; then
 	   touch ${HOME}/meza_config_init.done
 	   echo -e "${ok}Done.${NC}"
    else 
@@ -188,7 +188,7 @@ add_wikis () {
    echo -e "${update}Applying config to apply new images.${NC}"
    sudo sed -i 's/primary_wiki_id: demo/primary_wiki_id: poic/g' /opt/conf-meza/public/public.yml
    update_meza_config
-   if test $status -eq 0; then
+   if [[ $status -eq 0 ]]; then
 		echo -e "${ok}Done.${NC}"
    else 
 		echo -e "${warn}Something didn't go right, correct any issues and try again.${NC}"
