@@ -33,18 +33,28 @@ if [ "$EUID" -eq 0 ]; then
 fi
 
 start_menu () {
-
-  dialog --inputbox "Enter username to add:" 10 40 2>dialog.wiki_user
-  wiki_user=$(cat dialog.wiki_user)
-  dialog --title "User Password Option" --yesno "Would you like to set the password for the user?" 10 40
-  wiki_pwd_opt=$?
-  if [ $wiki_pwd_opt = 0 ]; then 
-    dialog --inputbox "Enter password for $wiki_user:" 10 40 2>dialog.wiki_pwd
-    wiki_pwd=$(cat dialog.wiki_pwd)
-  fi
-  dialog --title "Account Type" --radiolist "Which account type is $wiki_user ?" 10 40 10 1 admin OFF 2 cadre OFF 3 pd OFF 4 other ON 2>dialog.wiki_account
-  wiki_account=$(cat dialog.wiki_account);
-
+  donewithusers=1
+  while ! $donewithusers; do 
+    dialog --inputbox "Enter username to add:" 10 40 2>dialog.wiki_user
+    wiki_user=$(cat dialog.wiki_user)
+    rm dialog.wiki_user
+    dialog --title "User Password Option" --yesno "Would you like to set the password for the user?" 10 40
+    wiki_pwd_opt=$?
+    if [ $wiki_pwd_opt = 0 ]; then 
+      dialog --inputbox "Enter password for $wiki_user:" 10 40 2>dialog.wiki_pwd
+      wiki_pwd=$(cat dialog.wiki_pwd)
+	  rm dialog.wiki_pwd
+    fi
+    dialog --title "Account Type" --radiolist "Which account type is $wiki_user ?" 10 40 10 1 admin OFF 2 cadre OFF 3 pd OFF 4 other ON 2>dialog.wiki_account
+    wiki_account=$(cat dialog.wiki_account)
+    rm dialog.wiki_account
+    
+	dialog --infobox "Adding User $wiki_user as $wiki_account" 10 40
+	dialog --yesno "Would you like to add another user?" 10 40
+    if $? = 1; then
+	  donewithusers=0
+	fi
+  clear
   echo $wiki_user $wiki_pwd_opt $wiki_pwd $wiki_account
 }
 
