@@ -45,11 +45,11 @@ start_menu () {
       wiki_pwd=$(cat dialog.wiki_pwd)
 	  rm dialog.wiki_pwd
     fi
-    dialog --no-items --title "Account Type" --radiolist "Which account type is $wiki_user ?" 40 40 6 admin OFF cadre OFF pd OFF other ON 2>dialog.wiki_account
+    dialog --no-items --title "Account Type" --radiolist "Which account type is $wiki_user ?" 20 40 6 admin OFF cadre OFF pd OFF other ON 2>dialog.wiki_account
     wiki_account=$(cat dialog.wiki_account)
     rm dialog.wiki_account
     
-	dialog --begin 1 5 --infobox "Adding User $wiki_user as $wiki_account" 10 40 --sleep 2
+	dialog --sleep 2 --begin 1 5 --infobox "Adding User $wiki_user as $wiki_account" 10 40
 	dialog --yesno "Would you like to add another user?" 10 40
     if [ $? = 1 ]; then
 	  donewithusers=0
