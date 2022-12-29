@@ -60,44 +60,38 @@ fi
   # sql_db_info=0
 # fi
 # }
-# add_admin () {
-   # usr=$1
-   # wiki=$2
-   # echo -e "${update}Adding${cyan} ${usr} ${NC}as admin to ${cyan}${wiki}${NC}"
-   # case $wiki in 
-     # demo)
-	   # sudo WIKI=${wiki} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Viewer $usr $default_pswd
-	   # ;;
-     # poic)
-       # sudo WIKI=${wiki} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=ndc,cadre,pd $usr $default_pswd
-	   # ;;
-   # esac
-# }
+add_admin () {
+   usr=$1
+   wiki=$2
+   echo -e "${update}Adding${cyan} ${usr} ${NC}as admin to ${cyan}${wiki}${NC}"
+   case $wiki in 
+     demo)
+	   sudo WIKI=${wiki} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Viewer $usr ${wiki_pwd}
+	   ;;
+     poic)
+       sudo WIKI=${wiki} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=ndc,cadre,pd $usr ${wiki_pwd}
+	   ;;
+   esac
+}
 
-# add_contributer () {
-   # usr=$1
-   # wiki=$2
-   # custom_groups=$3
-   # echo -e "${update}Adding${cyan} ${usr} ${NC}as contributor to ${cyan}${t}${NC}"
-   # case $t in 
-	   # demo)
-	     # sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=Viewer $usr $default_pswd
-	   # ;;
-	   # poic)
-	     # sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=$custom_groups $usr $default_pswd
-	   # ;;
-	   ##science)
-	   ##  sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=project $usr $default_pswd
-	   ##;;
-	   ##cadre)
-	   ##  sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=cadre $usr $default_pswd
-	   ##;;
-	   # *)
-	     # echo "${t} not defined"
-	   # ;;
-   # esac
+add_contributer () {
+   usr=$1
+   wiki=$2
+   custom_groups=$3
+   echo -e "${update}Adding${cyan} ${usr} ${NC}as contributor to ${cyan}${t}${NC}"
+   case $t in 
+	   demo)
+	     sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=Viewer $usr ${wiki_pwd}
+	   ;;
+	   poic)
+	     sudo WIKI=${t} php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --custom-groups=$custom_groups $usr ${wiki_pwd}
+	   ;;
+	   *)
+	     echo "${t} not defined"
+	   ;;
+   esac
 
-# }
+}
 
 # check for user () {
 ##$1 = username
@@ -163,18 +157,19 @@ start_menu () {
     rm dialog.wiki_account
     
 	for t in ${wikis[*]}; do 
-	  case $2 in 
+	  case ${wiki_account} in 
 		cadre)
-			#add_contributer $1 $t cadre
+			add_contributer ${wiki_user} $t cadre
 			;;
-		gen_ndc)
-			#add_contributer $1 $t ndc
+		other)
+		    #also known as generic NDC account
+			add_contributer ${wiki_user} $t ndc
 			;;
 		pd)
-			#add_contributer $1 $t pd
+			add_contributer ${wiki_user} $t pd
 			;;
 		admin)
-			#add_admin $1 $t
+			add_admin ${wiki_user} $t
 			;;
 	  esac
 	done
