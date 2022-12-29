@@ -42,7 +42,7 @@ start_menu () {
     dialog --inputbox "Enter password for $wiki_user:" 10 40 2>dialog.wiki_pwd
     wiki_pwd=$(cat dialog.wiki_pwd)
   fi
-  dialog --title "Account Type" --radiolist "Which account type is $wiki_user ?" 10 40 6 admin admin OFF cadre cadre OFF pd pd OFF other other ON 2>dialog.wiki_account
+  dialog --title "Account Type" --radiolist "Which account type is $wiki_user ?" 10 40 10 1 admin OFF 2 cadre OFF 3 pd OFF 4 other ON 2>dialog.wiki_account
   wiki_account=$(cat dialog.wiki_account);
 
   echo $wiki_user $wiki_pwd_opt $wiki_pwd $wiki_account
