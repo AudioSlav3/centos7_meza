@@ -139,6 +139,8 @@ add_contributer () {
 
 start_menu () {
   donewithusers=1
+  wikis=()
+  wikis=$(ls /opt/conf-meza/public/wikis/)
   while [ ! $donewithusers = 0 ]; do 
     dialog --inputbox "Enter username to add:" 10 40 2>dialog.wiki_user
     wiki_user=$(cat dialog.wiki_user)
