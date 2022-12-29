@@ -1,7 +1,5 @@
 //demo-perms all read and admin edit
-$wgGroupPermissions['*']['read'] = true;
+$mezaAuthType = 'anon-read';
 $wgGroupPermissions['*']['edit'] = false;
-$wgGroupPermissions['user']['read'] = true;
-$wgGroupPermissions['user']['edit'] = false;
 $wgGroupPermissions['sysop']['read'] = true;
 $wgGroupPermissions['sysop']['edit'] = true;

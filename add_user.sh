@@ -33,33 +33,6 @@ if [ "$EUID" -eq 0 ]; then
 fi
 
 
-# chk_param () {
-#### CHECK for parameter 
-# username=null
-# password=null
-# account=null
-# wiki_db_usr=null
-# wiki_db_pwd=null
-# sql_db_info=1
-# while getopts u:p:a:wu:wp: flag
-# do
-  # case "${flag}" in
-    # u) username=${OPTARG};;
-    # p) password=${OPTARG};;
-	# a) account=${OPTARG};;
-    # wu) wiki_db_usr=${OPTARG};;
-	# wp) wiki_db_pwd=${OPTARG};;
-  # esac
-# done
-# if [ $username = null ] && [ $account = null ]; then
-  # echo -e "${err}Missing user information. Use:"
-  # echo -e "      add_user.sh -u ${purple}user${NC} [-p ${purple}password${NC}] -a (${purple}admin${NC}|${purple}cadre${NC}|${purple}pd${NC}|${purple}other${NC}) [-wu ${purple}wiki_db_user${NC} -wu ${purple}wiki_db_password${NC}]${NC}"
-  # exit 2
-# fi
-# if [ ! $wiki_db_usr = null ] && [ ! $wiki_db_pwd = null ]; then 
-  # sql_db_info=0
-# fi
-# }
 add_admin () {
    usr=$1
    wiki=$2
@@ -94,9 +67,9 @@ add_contributer () {
 }
 
 # check for user () {
-##$1 = username
+##$1 = wikiuser
 ##$2 = db user - default 'wiki_app_user'
-##$3 = db pass - default 'DummyPasw0rd$'
+##$3 = db pass 
 ##$4 = database - demo vs poic 
 # RESULT_VARIABLE=$(mysql -u$2 -p$3 wiki_$4 -sse "SELECT EXISTS(SELECT 1 FROM user WHERE user_name = '${1^}')")
 
@@ -107,34 +80,6 @@ add_contributer () {
   ## False
   # return 1
 # fi
-# }
-
-# old_style () {
-# default_pswd=$(date +%s | sha256sum | base64 | head -c 14 ; echo)
-# wikis=()
-# wikis=$(ls /opt/conf-meza/public/wikis/)
-# for t in ${wikis[*]}; do 
- # case $2 in 
-  # cadre)
-    # add_contributer $1 $t cadre
-	# ;;
-  # gen_ndc)
-    # add_contributer $1 $t ndc
-	# ;;
-  # pd)
-    # add_contributer $1 $t pd
-	# ;;
-  # admin)
-    # add_admin $1 $t
-	# ;;
-  # *)
-      # echo -e "${err}Missing user information. Use:"
-	  # echo -e "      add_user.sh ${purple}user${NC} (${purple}cadre${NC}|${purple}pd${NC}|${purple}gen_ndc${NC}|${purple}admin${NC}) ${NC}"
-	  # exit 2
-	# ;;
- # esac
-# done
-# echo -e "${info}${cyan}${usr}${NC}'s default password is${cyan} ${default_pswd} ${NC}"
 # }
 
 start_menu () {
@@ -185,6 +130,5 @@ start_menu () {
 	fi
   done
   clear
-  echo $wiki_user $wiki_pwd_opt $wiki_pwd $wiki_account
 }
 start_menu

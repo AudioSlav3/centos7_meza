@@ -134,13 +134,15 @@ add_wikis () {
  for wikiid in ${wiki_list[@]}
  do
     #set demo wiki for anyone to read
-	echo -e "${update}Updating demo base.php to allow anyone to read Wiki, but onlly admin to write.${NC}"
-	if ! $(grep demo-perms /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php); then
-	  cat $variable_dirs/demo_perm.txt | sudo tee -a /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
-	  #sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27anon-read\x27;/g' /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
+	if [ "$wikiid" = "demo" ]; then 
+	  echo -e "${update}Updating demo base.php to allow anyone to read Wiki, but onlly admin to write.${NC}"
+	  if ! $(grep -q demo-perms /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php); then
+		  cat $variable_dirs/demo_perm.txt | sudo tee -a /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
+		  #sudo sed -i 's/\/\/ $mezaAuthType = \x27viewer-read\x27;/$mezaAuthType = \x27anon-read\x27;/g' /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
+	  fi
+	  sudo cp $delta_config_file_dirs/wikis/demo/* /opt/conf-meza/public/wikis/demo/
+	  sudo sed -i "s/Sitename = 'Demo Wiki'/Sitename = 'How To'/g" /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
 	fi
-	sudo cp $delta_config_file_dirs/wikis/demo/* /opt/conf-meza/public/wikis/demo/
-	sudo sed -i "s/Sitename = 'Demo Wiki'/Sitename = 'How To'/g" /opt/conf-meza/public/wikis/demo/preLocalSettings.d/base.php
 	if ! test -d "/opt/conf-meza/public/wikis/$wikiid/"; then 
 	  echo -e "${update}Deploying Wiki:${NC}"
       echo -e "${cyan}        $wikiid, $wikititle${NC}"
