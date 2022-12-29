@@ -68,7 +68,7 @@ install_meza_base () {
     echo -e "${update}Installing MEZA Wiki, this will take a while.${NC}"
     sudo bash /opt/meza/src/scripts/getmeza.sh
 	sudo meza deploy monolith	
-    if [[ $status -eq 0 ]]; then
+   if [[ $status -eq 0 ]]; then
 	   touch ${HOME}/meza_base.done
 	   echo -e "${ok}MEZA Wiki installed.${NC}"
 	else 
