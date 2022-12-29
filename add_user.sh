@@ -51,7 +51,7 @@ start_menu () {
     
 	dialog --infobox "Adding User $wiki_user as $wiki_account" 10 40
 	dialog --yesno "Would you like to add another user?" 10 40
-    if $? = 1; then
+    if [ $? = 1 ]; then
 	  donewithusers=0
 	fi
   clear
