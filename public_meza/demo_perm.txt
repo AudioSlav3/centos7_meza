@@ -1,3 +1,4 @@
+//demo-perms all read and admin edit
 $wgGroupPermissions['*']['read'] = true;
 $wgGroupPermissions['*']['edit'] = false;
 $wgGroupPermissions['user']['read'] = true;
