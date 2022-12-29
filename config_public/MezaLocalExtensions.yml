@@ -3,14 +3,14 @@ list:
   # ###################################################################
   # Non NASA Extensions
   # ###################################################################
-  // Override core version. v1.6 last version supported by MW 1.31 
+  # Override core version. v1.6 last version supported by MW 1.31 
   - name: ApprovedRevs
     repo: https://github.com/wikimedia/mediawiki-extensions-ApprovedRevs.git
     version: tags/1.6
     config: |
       $egApprovedRevsAutomaticApprovals = false;
 
-  // v2.8 last version supported by MW 1.31    
+  # v2.8 last version supported by MW 1.31    
   - name: Cargo
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Cargo
     version: "tags/2.8"
@@ -30,12 +30,12 @@ list:
     config: |
       wfLoadExtension( 'CountDownClock' );
       
-  // Override core version. v1.5.3 last version supported by MW 1.31
+  # Override core version. v1.5.3 last version supported by MW 1.31
   - name: DisplayTitle
     repo: https://github.com/wikimedia/mediawiki-extensions-DisplayTitle.git
     version: tags/1.5.3
       
-  // vREL1_35 last version supported by MW 1.31 
+  # vREL1_35 last version supported by MW 1.31 
   - name: DynamicSidebar
     repo: https://github.com/wikimedia/mediawiki-extensions-DynamicSidebar.git
     # After this, specifies MW 1.35 is required
@@ -44,21 +44,21 @@ list:
       $wgDynamicSidebarUseUserpages = true;
       $wgDynamicSidebarUseGroups = true;
 
-  // vREL1_33 last version supported by MW 1.31 
+  # vREL1_33 last version supported by MW 1.31 
   - name: EasyTimeline
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/timeline
     version: REL1_33
     config: |
       wfLoadExtension( 'EasyTimeline' );
 
-  // vREL1_38 last version supported by MW 1.31 
+  # vREL1_38 last version supported by MW 1.31 
   - name: FlexDiagrams
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/FlexDiagrams
     version: REL1_38
     config: |
       wfLoadExtension( 'FlexDiagrams' );
 
-  // vREL1_34 last version supported by MW 1.31 
+  # vREL1_34 last version supported by MW 1.31 
   - name: LoopFunctions
     repo:  https://gerrit.wikimedia.org/r/mediawiki/extensions/LoopFunctions
     version: REL1_34
@@ -70,7 +70,7 @@ list:
     version: "tags/3.4.0"
     legacy_load: True
 
-  // v2.1.1 last version supported by MW 1.31 
+  # v2.1.1 last version supported by MW 1.31 
   - name: Mermaid
     composer: mediawiki/mermaid
     version: "2.1.1"
@@ -84,7 +84,7 @@ list:
     config: |
       wfLoadExtension( 'Quiz' );
 
-  // vREL1_37 last version supported by MW 1.31 
+  # vREL1_37 last version supported by MW 1.31 
   - name: SemanticACL
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/SemanticACL
     version: REL1_37
@@ -92,7 +92,7 @@ list:
       wfLoadExtension( 'SemanticACL' );
       $wgEnablePrivateLinks = false;
 
-  // Override core version. v2.1.0 last version supported by MW 1.31
+  # Override core version. v2.1.0 last version supported by MW 1.31
   - name: SemanticExtraSpecialProperties
     composer: "mediawiki/semantic-extra-special-properties"
     version: "2.1.0"
