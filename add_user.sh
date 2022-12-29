@@ -49,7 +49,7 @@ start_menu () {
     wiki_account=$(cat dialog.wiki_account)
     rm dialog.wiki_account
     
-	dialog --sleep 2 --begin 1 5 --infobox "Adding User $wiki_user as $wiki_account" 10 40
+	dialog --keep-window --sleep 2 --begin 1 5 --infobox "Adding User $wiki_user as $wiki_account" 20 40
 	dialog --yesno "Would you like to add another user?" 10 40
     if [ $? = 1 ]; then
 	  donewithusers=0
