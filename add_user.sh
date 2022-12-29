@@ -179,7 +179,7 @@ start_menu () {
 	  esac
 	done
 	
-	dialog --colors --begin 1 5 --msgbox "\Zb[ \Z4INFO ]: \Z4${usr}\Zn's default password is\Z4 ${default_pswd} \Zn" 20 40
+	dialog --colors --begin 1 5 --msgbox "[ \Z4INFO\Zn ]: \Z4${wiki_user}\Zn has been added as \Z4${wiki_account}\Zn and has password set to\Z4 ${wiki_pwd} \Zn" 20 40
 	
 	dialog --yesno "Would you like to add another user?" 10 40
     if [ $? = 1 ]; then
