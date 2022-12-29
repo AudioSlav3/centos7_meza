@@ -32,32 +32,6 @@ if [ "$EUID" -eq 0 ]; then
   exit 1
 fi
 
-start_menu () {
-  donewithusers=1
-  while [ ! $donewithusers = 0 ]; do 
-    dialog --inputbox "Enter username to add:" 10 40 2>dialog.wiki_user
-    wiki_user=$(cat dialog.wiki_user)
-    rm dialog.wiki_user
-    dialog --title "User Password Option" --yesno "Would you like to set the password for the user?" 10 40
-    wiki_pwd_opt=$?
-    if [ $wiki_pwd_opt = 0 ]; then 
-      dialog --inputbox "Enter password for $wiki_user:" 10 40 2>dialog.wiki_pwd
-      wiki_pwd=$(cat dialog.wiki_pwd)
-	  rm dialog.wiki_pwd
-    fi
-    dialog --no-items --title "Account Type" --radiolist "Which account type is $wiki_user ?" 20 40 6 admin OFF cadre OFF pd OFF other ON 2>dialog.wiki_account
-    wiki_account=$(cat dialog.wiki_account)
-    rm dialog.wiki_account
-    
-	dialog --keep-window --sleep 2 --begin 1 5 --infobox "Adding User $wiki_user as $wiki_account" 20 40
-	dialog --yesno "Would you like to add another user?" 10 40
-    if [ $? = 1 ]; then
-	  donewithusers=0
-	fi
-  done
-  clear
-  echo $wiki_user $wiki_pwd_opt $wiki_pwd $wiki_account
-}
 
 # chk_param () {
 #### CHECK for parameter 
@@ -169,4 +143,51 @@ start_menu () {
 # echo -e "${info}${cyan}${usr}${NC}'s default password is${cyan} ${default_pswd} ${NC}"
 # }
 
+start_menu () {
+  donewithusers=1
+  while [ ! $donewithusers = 0 ]; do 
+    dialog --inputbox "Enter username to add:" 10 40 2>dialog.wiki_user
+    wiki_user=$(cat dialog.wiki_user)
+    rm dialog.wiki_user
+    dialog --title "User Password Option" --yesno "Would you like to set the password for the user?" 10 40
+    wiki_pwd_opt=$?
+    if [ $wiki_pwd_opt = 0 ]; then 
+      dialog --inputbox "Enter password for $wiki_user:" 10 40 2>dialog.wiki_pwd
+      wiki_pwd=$(cat dialog.wiki_pwd)
+	  rm dialog.wiki_pwd
+	else
+	  wiki_pwd=$(date +%s | sha256sum | base64 | head -c 14 ; echo)
+    fi
+    dialog --no-items --title "Account Type" --radiolist "Which account type is $wiki_user ?" 20 40 6 admin OFF cadre OFF pd OFF other ON 2>dialog.wiki_account
+    wiki_account=$(cat dialog.wiki_account)
+    rm dialog.wiki_account
+    
+	for t in ${wikis[*]}; do 
+	  case $2 in 
+		cadre)
+			#add_contributer $1 $t cadre
+			;;
+		gen_ndc)
+			#add_contributer $1 $t ndc
+			;;
+		pd)
+			#add_contributer $1 $t pd
+			;;
+		admin)
+			#add_admin $1 $t
+			;;
+	  esac
+	done
+	
+	dialog --begin 1 5 --msgbox "${info}${cyan}${usr}${NC}'s default password is${cyan} ${default_pswd} ${NC}" 20 40
+	
+	
+	dialog --yesno "Would you like to add another user?" 10 40
+    if [ $? = 1 ]; then
+	  donewithusers=0
+	fi
+  done
+  clear
+  echo $wiki_user $wiki_pwd_opt $wiki_pwd $wiki_account
+}
 start_menu
