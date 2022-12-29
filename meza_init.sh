@@ -174,6 +174,11 @@ add_wikis () {
    echo -e "${ok}Done.${NC}"
  fi
 }
+create_admin () {
+  default_pswd=$(date +%s | sha256sum | base64 | head -c 14 ; echo)
+  sudo WIKI=demo php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=Viewer $usr $default_pswd
+  sudo WIKI=poic php /opt/htdocs/mediawiki/maintenance/createAndPromote.php --force --bureaucrat --sysop --custom-groups=ndc,cadre,pd $usr $default_pswd
+}
   
 ##### END   
 #################################
@@ -185,3 +190,4 @@ install_meza_base
 install_mediawiki_extensions
 meza_public_init
 add_wikis
+create_admin
