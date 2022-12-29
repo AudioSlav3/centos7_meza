@@ -33,8 +33,15 @@ if [ "$EUID" -eq 0 ]; then
 fi
 
 start_menu () {
-  result=$(dialog --inputbox "Enter username to add::" 10 40 2>&1 1>&3);
-  echo $result
+  exec 3>&1;
+  wiki_user=$(dialog --inputbox "Enter username to add:" 10 40 2>&1 1>&3);
+  wiki_pwd_opt=$(dialog --title "User Password Option" --yesno "Would you like to set the password for the user?" 10 40 2>&1 1>&3);
+  if [ $wiki_pwd_opt = 0 ]; then 
+    wiki_pwd=$(dialog --inputbox "Enter password for $wiki_user:" 10 40 2>&1 1>&3);
+  fi
+  wiki_account=$(dialog --title "Account Type" --radiolist 10 40 6 "admin" OFF "cadre" OFF "pd" OFF "other" ON 2>&1 1>&3);
+  exec 3>&-;
+  echo $wiki_user $wiki_pwd_opt $wiki_pwd $wiki_account
 }
 
 # chk_param () {
