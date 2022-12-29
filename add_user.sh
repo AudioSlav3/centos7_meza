@@ -54,6 +54,7 @@ start_menu () {
     if [ $? = 1 ]; then
 	  donewithusers=0
 	fi
+  done
   clear
   echo $wiki_user $wiki_pwd_opt $wiki_pwd $wiki_account
 }
