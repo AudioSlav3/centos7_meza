@@ -19,13 +19,19 @@ while [ $exit_status = 1 ]; do
        --keep-window --no-items --default-item "$wiki_select" --begin 1 5 --menu "Menu" 40 40 20 ${wiki_name[*]} 2>wikiselect
   wiki_select=$(cat wikiselect)
   rm wikiselect
-  get_users
-  if [ $? = 1 ]; then
+  if [ -z $wiki_select ]; then
     exit_status=0
+  else
+    get_users
   fi
   user_count=$(wc -l wikiusers.txt | cut -d " " -f 1)
 done
 clear
 }
-
+dump_poic () {
+  sudo WIKI=poic php /opt/htdocs/mediawiki/maintenance/dumpBackup.php --current > poic_backup.xml
+}
+import_poic () {
+  sudo WIKI=poic php /opt/htdocs/mediawiki/maintenance/importDump.php < poic_backup.xml
+}
 show_wiki_users
