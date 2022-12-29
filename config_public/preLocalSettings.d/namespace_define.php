@@ -53,8 +53,8 @@ $wgExtraNamespaces[NS_ROUNDTABLE_LOG] = "Roundtable_Log";
 $wgExtraNamespaces[NS_ROUNDTABLE_LOG_TALK] = "Roundtable_Log_talk";
 
 // Namespace
-$wgExtraNamespaces[NS_ROUNDTABLE_ITEM] = "Roundtable_Item";
-$wgExtraNamespaces[NS_ROUNDTABLE_ITEM_TALK] = "Roundtable_Item_talk";
+$wgExtraNamespaces[NS_ROUNDTABLE_ACTION_ITEM] = "Roundtable_Action_Item";
+$wgExtraNamespaces[NS_ROUNDTABLE_ACTION_ITEM_TALK] = "Roundtable_Action_Item_talk";
 
 // Namespace
 $wgExtraNamespaces[NS_ROUNDTABLE_TAKEAWAY] = "Roundtable_Takeaway";
