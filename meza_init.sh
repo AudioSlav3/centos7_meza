@@ -206,12 +206,95 @@ create_admin () {
   
 ##### END   
 #################################
-##### START 
+##### START INTERWIKI TABLE
 
-##### END   
+## NOTE must do this for the prime wiki in the case below 'wiki_poic'
+set_interwiki () {
+  db_user=wiki_app_user
+  msfc_server=wiki.msfc.nasa.gov
+  echo -ne "${YELLOW}Enter password for Wiki MySQL Database${NC}: "
+  read db_pass
+  #using wiki.msfc.nasa.gov, change if this is different. 
+  #HOSC Entries
+   prefix=general
+   if [ -z $(mysql -u${db_user} -p${db_pass} wiki_poic -sse "select iw_prefix FROM interwiki WHERE iw_prefix='$prefix';") ]; then 
+	 echo -e "${info}Value does not exist, creating it${NC}"
+   else
+     echo -e "${info}Value exists, deleting it first before re-creating it${NC}"
+	 mysql -u${db_user} -p${db_pass} wiki_poic -e "DELETE FROM interwiki WHERE iw_prefix='$prefix';" 
+   fi
+   mysql -u${db_user} -p${db_pass} wiki_poic -sse "INSERT INTO interwiki (iw_prefix, iw_url, iw_local, iw_trans) VALUES ('$prefix', 'https://${msfc_server}/index.php/\$1', 1, 0);"
+
+   prefix=howto
+   if [ -z $(mysql -u${db_user} -p${db_pass} wiki_poic -sse "select iw_prefix FROM interwiki WHERE iw_prefix='$prefix';") ]; then 
+	 echo -e "${info}Value does not exist, creating it${NC}"
+   else
+     echo -e "${info}Value exists, deleting it first before re-creating it${NC}"
+	 mysql -u${db_user} -p${db_pass} wiki_poic -e "DELETE FROM interwiki WHERE iw_prefix='$prefix';" 
+   fi   
+  mysql -u${db_user} -p${db_pass} wiki_poic -sse "INSERT INTO interwiki (iw_prefix, iw_url, iw_local, iw_trans) VALUES ('$prefix', 'https://${msfc_server}/demo/index.php/\$1', 1, 0);"
+  
+   prefix=hosc
+   if [ -z $(mysql -u${db_user} -p${db_pass} wiki_poic -sse "select iw_prefix FROM interwiki WHERE iw_prefix='$prefix';") ]; then 
+	 echo -e "${info}Value does not exist, creating it${NC}"
+   else
+     echo -e "${info}Value exists, deleting it first before re-creating it${NC}"
+	 mysql -u${db_user} -p${db_pass} wiki_poic -e "DELETE FROM interwiki WHERE iw_prefix='$prefix';" 
+   fi     
+  mysql -u${db_user} -p${db_pass} wiki_poic -sse "INSERT INTO interwiki (iw_prefix, iw_url, iw_local, iw_trans) VALUES ('$prefix', 'https://${msfc_server}/poic/index.php/\$1', 1, 0);"
+
+   prefix=poic
+   if [ -z $(mysql -u${db_user} -p${db_pass} wiki_poic -sse "select iw_prefix FROM interwiki WHERE iw_prefix='$prefix';") ]; then 
+	 echo -e "${info}Value does not exist, creating it${NC}"
+   else
+     echo -e "${info}Value exists, deleting it first before re-creating it${NC}"
+	 mysql -u${db_user} -p${db_pass} wiki_poic -e "DELETE FROM interwiki WHERE iw_prefix='$prefix';" 
+   fi   
+   mysql -u${db_user} -p${db_pass} wiki_poic -sse "INSERT INTO interwiki (iw_prefix, iw_url, iw_local, iw_trans) VALUES ('$prefix', 'https://${msfc_server}/poic/index.php/\$1', 1, 0);"
+  #JSC Entries
+   prefix=fod_general
+   if [ -z $(mysql -u${db_user} -p${db_pass} wiki_poic -sse "select iw_prefix FROM interwiki WHERE iw_prefix='$prefix';") ]; then 
+	 echo -e "${info}Value does not exist, creating it${NC}"
+   else
+     echo -e "${info}Value exists, deleting it first before re-creating it${NC}"
+	 mysql -u${db_user} -p${db_pass} wiki_poic -e "DELETE FROM interwiki WHERE iw_prefix='$prefix';" 
+   fi   
+   mysql -u${db_user} -p${db_pass} wiki_poic -sse "INSERT INTO interwiki (iw_prefix, iw_url, iw_local, iw_trans) VALUES ('$prefix', 'https://wiki.jsc.nasa.gov/fod/index.php/\$1', 1, 0);"
+
+   prefix=fod_iss
+   if [ -z $(mysql -u${db_user} -p${db_pass} wiki_poic -sse "select iw_prefix FROM interwiki WHERE iw_prefix='$prefix';") ]; then 
+	 echo -e "${info}Value does not exist, creating it${NC}"
+   else
+     echo -e "${info}Value exists, deleting it first before re-creating it${NC}"
+	 mysql -u${db_user} -p${db_pass} wiki_poic -e "DELETE FROM interwiki WHERE iw_prefix='$prefix';" 
+   fi   
+   mysql -u${db_user} -p${db_pass} wiki_poic -sse "INSERT INTO interwiki (iw_prefix, iw_url, iw_local, iw_trans) VALUES ('$prefix', 'https://wiki.jsc.nasa.gov/iss/index.php/\$1', 1, 0);"
+  #External Entries
+   prefix=w
+   if [ -z $(mysql -u${db_user} -p${db_pass} wiki_poic -sse "select iw_prefix FROM interwiki WHERE iw_prefix='$prefix';") ]; then 
+	 echo -e "${info}Value does not exist, creating it${NC}"
+   else
+     echo -e "${info}Value exists, deleting it first before re-creating it${NC}"
+	 mysql -u${db_user} -p${db_pass} wiki_poic -e "DELETE FROM interwiki WHERE iw_prefix='$prefix';" 
+   fi   
+   mysql -u${db_user} -p${db_pass} wiki_poic -sse "INSERT INTO interwiki (iw_prefix, iw_url, iw_local, iw_trans) VALUES ('$prefix', 'https://en.wikipedia.org/wiki/\$1', 1, 0);"
+
+   prefix=mw
+   if [ -z $(mysql -u${db_user} -p${db_pass} wiki_poic -sse "select iw_prefix FROM interwiki WHERE iw_prefix='$prefix';") ]; then 
+	 echo -e "${info}Value does not exist, creating it${NC}"
+   else
+     echo -e "${info}Value exists, deleting it first before re-creating it${NC}"
+	 mysql -u${db_user} -p${db_pass} wiki_poic -e "DELETE FROM interwiki WHERE iw_prefix='$prefix';" 
+   fi   
+   mysql -u${db_user} -p${db_pass} wiki_poic -sse "INSERT INTO interwiki (iw_prefix, iw_url, iw_local, iw_trans) VALUES ('$prefix', 'https://www.mediawiki.org/wiki/\$1', 1, 0);"
+  echo -ne "${info}InterWiki Table${NC}: "
+  mysql -u${db_user} -p${db_pass} wiki_poic -e "SELECT * FROM interwiki;"
+}
+##### END   INTERWIKI TABLE
 #################################
 install_meza_base
 install_mediawiki_extensions
 meza_public_init
 add_wikis
-create_admin
+#create_admin
+set_interwiki
