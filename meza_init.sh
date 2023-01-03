@@ -211,8 +211,9 @@ create_admin () {
 ## NOTE must do this for the prime wiki in the case below 'wiki_poic'
 set_interwiki () {
   db_user=wiki_app_user
-  msfc_server=wiki.msfc.nasa.gov
-  echo -ne "${YELLOW}Enter password for Wiki MySQL Database${NC}: "
+  msfc_server=10.255.252.201
+  #msfc_server=wiki.msfc.nasa.gov
+    echo -ne "${YELLOW}Enter password for Wiki MySQL Database${NC}: "
   read db_pass
   #using wiki.msfc.nasa.gov, change if this is different. 
   #HOSC Entries
@@ -223,7 +224,7 @@ set_interwiki () {
      echo -e "${info}Value exists, deleting it first before re-creating it${NC}"
 	 mysql -u${db_user} -p${db_pass} wiki_poic -e "DELETE FROM interwiki WHERE iw_prefix='$prefix';" 
    fi
-   mysql -u${db_user} -p${db_pass} wiki_poic -sse "INSERT INTO interwiki (iw_prefix, iw_url, iw_local, iw_trans) VALUES ('$prefix', 'https://${msfc_server}/index.php/\$1', 1, 0);"
+   mysql -u${db_user} -p${db_pass} wiki_poic -sse "INSERT INTO interwiki (iw_prefix, iw_url, iw_local, iw_trans) VALUES ('$prefix', 'https://${msfc_server}/', 1, 0);"
 
    prefix=howto
    if [ -z $(mysql -u${db_user} -p${db_pass} wiki_poic -sse "select iw_prefix FROM interwiki WHERE iw_prefix='$prefix';") ]; then 
